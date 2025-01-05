@@ -16,7 +16,7 @@ Shell.FlyoutBehavior="Disabled">
         <Tab Title="Concerts" Icon="festival.png">
             <ShellContent Route="ConcertsPage" ContentTemplate="{DataTemplate views:ConcertsPage}" />
         </Tab>
-        
+
         <!-- My bookings -->
         <Tab Title="My Bookings" Icon="tickets.png">
             <ShellContent Route="MyBookingsPage" ContentTemplate="{DataTemplate views:MyBookingsPage}" />
@@ -28,4 +28,7 @@ Shell.FlyoutBehavior="Disabled">
         </Tab>
 
     </TabBar>
+
+    <!-- PerformancePage route -->
+    <ShellContent Route="PerformancePage" ContentTemplate="{DataTemplate views:PerformancePage}" />
 </Shell>

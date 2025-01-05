@@ -2,25 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DMA_AU24_LAB2_Group4.MAUI.ViewModels"
+             xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="DMA_AU24_LAB2_Group4.MAUI.Views.ConcertsPage"
              Title="Concerts">
 
+    <ContentPage.Behaviors>
+        <!-- This binds to the Appearing event to trigger data loading -->
+        <behaviors:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+        <!--<behaviors:EventToCommandBehavior Command="{Binding SelectionChangedCommand}" EventName="SelectionChanged" />-->
+    </ContentPage.Behaviors>
 
-    <ContentPage.Content>
-        <CollectionView ItemsSource="{Binding ConcertItems}"
-                        SelectionMode="Single"
-                        SelectedItem="{Binding SelectedConcert, Mode=TwoWay}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="10" Margin="5" BackgroundColor="LightGray" CornerRadius="5">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Name}" FontSize="20" FontAttributes="Bold" />
-                            <Label Text="{Binding Location}" FontSize="16" />
-                            <Label Text="{Binding Date, StringFormat='{0:MMMM dd, yyyy}'}" FontSize="16" />
-                        </VerticalStackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </ContentPage.Content>
+    <CollectionView ItemsSource="{Binding ConcertItems}" 
+                    SelectionMode="None">
+
+
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <Frame Padding="10" Margin="5" BackgroundColor="LightGray" CornerRadius="5">
+                    <Frame.GestureRecognizers>
+                        <!-- Bind to the command directly in the ViewModel -->
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ConcertViewModel}}, Path=SelectionChangedCommand}" 
+                          CommandParameter="{Binding}" />
+                    </Frame.GestureRecognizers>
+                    <VerticalStackLayout>
+                        <Label Text="{Binding Title}" FontSize="20" FontAttributes="Bold" />
+                        <Label Text="{Binding Description}" FontSize="16" />
+                    </VerticalStackLayout>
+                </Frame>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
+
 </ContentPage>
