@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DMA_AU24_LAB2_Group4.MAUI.Services;
+using Microsoft.Maui.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,14 @@ namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
                 await Application.Current.MainPage.DisplayAlert("Error", "Invalid email or password", "OK");
                 return;
             }
+
+            // Save customer into Preferences
+            //Preferences.Set("IsLoggedIn", true);
+            //Preferences.Set("CustomerId", customer.Id);
+            //Preferences.Set("CustomerEmail", customer.Email);
+
+
+
 
             // Navigera till huvudvyn efter lyckad inloggning
             await Shell.Current.GoToAsync("//ConcertsPage");
