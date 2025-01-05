@@ -55,7 +55,7 @@ _client = new HttpClient();
                     JsonSerializer.Deserialize<List<BookingDto>>(content, _serializerOptions)
                     ).ToObservableCollection();
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -148,4 +148,4 @@ _client = new HttpClient();
             }
         }
     }
-    }
+}

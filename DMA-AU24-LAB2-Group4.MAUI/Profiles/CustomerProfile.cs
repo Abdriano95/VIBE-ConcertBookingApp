@@ -26,6 +26,9 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Profiles
             // Map Customer model to CustomerDto
             CreateMap<Customer, RegisterCustomerDto>().ReverseMap();
             CreateMap<Customer, LoginDto>().ReverseMap();
+
+            // Map DTO to model 
+            CreateMap<UpdateCustomerDto, Customer>().ReverseMap();
         }
     }
 }
