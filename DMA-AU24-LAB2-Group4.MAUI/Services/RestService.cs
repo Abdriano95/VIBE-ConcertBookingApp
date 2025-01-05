@@ -153,7 +153,7 @@ _client = new HttpClient();
         public async Task<ObservableCollection<Concert>?> RefreshConcertDataAsync()
         {
             ObservableCollection<Concert> concerts = new ObservableCollection<Concert>();
-            Uri uri = new Uri(string.Format(Constants.RestUrl, string.Empty)); // Replace with actual concert URL
+            Uri uri = new Uri(string.Format(Constants.ConcertUrl, string.Empty));
 
             try
             {
@@ -177,7 +177,7 @@ _client = new HttpClient();
         public async Task<Concert?> GetConcertByIdAsync(int id)
         {
             Concert? concert = null;
-            var uri = new Uri($"https://yourapiurl.com/api/concerts/{id}");
+            Uri uri = new Uri(string.Format(Constants.ConcertUrl, id));
 
             try
             {
