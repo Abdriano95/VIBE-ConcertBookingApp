@@ -37,7 +37,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Repository
 
         public void UpdateCustomer(Customer customer)
         {
-            Update(customer);
+            DbContext.Customers.Update(customer);
         }
 
         public void DeleteCustomer(Customer customer)
