@@ -8,7 +8,7 @@ namespace DMA_AU24_LAB2_Group4.Data.DTO
 {
     public class CustomerDto
     {
-        public int CustromerId { get; set; } = 0!;
+        public int CustomerID { get; set; } = 0!;
         public string CustomerFirstName { get; set; } = null!;
         public string CustomerLastName { get; set; } = null!;
         public string Email { get; set; } = null!;
