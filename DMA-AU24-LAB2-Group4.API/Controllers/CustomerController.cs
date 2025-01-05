@@ -3,6 +3,7 @@ using DMA_AU24_LAB2_Group4.Data.DTO;
 using DMA_AU24_LAB2_Group4.Data.Entity;
 using DMA_AU24_LAB2_Group4.Data.Repository;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace DMA_AU24_LAB2_Group4.API.Controllers
 {
@@ -82,25 +83,28 @@ namespace DMA_AU24_LAB2_Group4.API.Controllers
         [HttpPost("getById")]
         public async Task<IActionResult> GetCustomerById([FromBody] CustomerDto customerDto)
         {
-            if (customerDto == null || customerDto.CustomerID <= 0)
-            {
-                return BadRequest("Invalid customer data.");
-            }
-
             try
             {
+                Debug.WriteLine($"Received CustomerId: {customerDto.CustomerID}");
+
                 var customer = await _unitOfWork.Customers.GetCustomerByIdAsync(customerDto.CustomerID);
                 if (customer == null)
+                {
+                    Debug.WriteLine("Customer not found.");
                     return NotFound();
+                }
 
-                var resultDto = _mapper.Map<CustomerDto>(customer);
-                return Ok(resultDto);
+                var customerDtoResult = _mapper.Map<CustomerDto>(customer);
+                Debug.WriteLine($"Returning CustomerDto: {customerDtoResult.CustomerID}");
+                return Ok(customerDtoResult);
             }
             catch (Exception ex)
             {
+                Debug.WriteLine($"Exception in GetCustomerById: {ex.Message}");
                 return StatusCode(500, new { Error = "Could not retrieve customer", Message = ex.Message });
             }
         }
+
 
         // POST: api/Customer/getBookings
         [HttpPost("getBookings")]

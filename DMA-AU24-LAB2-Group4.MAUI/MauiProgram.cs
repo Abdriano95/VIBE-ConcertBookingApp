@@ -33,18 +33,19 @@ namespace DMA_AU24_LAB2_Group4.MAUI
             builder.Services.AddAutoMapper(typeof(CustomerProfile));
 
             // Pages
-            builder.Services.AddSingleton<LoginPage>();
-            builder.Services.AddSingleton<RegisterPage>();
-            builder.Services.AddSingleton<BookingListPage>();
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<BookingListPage>();
             builder.Services.AddTransient<BookingItemPage>();
-            builder.Services.AddSingleton<ConcertsPage>();
-            builder.Services.AddSingleton<AppShell>();
-            builder.Services.AddSingleton<ProfilePage>();
-            builder.Services.AddSingleton<MyBookingsPage>();
+            builder.Services.AddTransient<ConcertsPage>();
+            builder.Services.AddTransient<AppShell>();
+            builder.Services.AddTransient<ProfilePage>();
+            builder.Services.AddTransient<MyBookingsPage>();
 
             // ViewModels
             builder.Services.AddSingleton<LoginViewModel>();
             builder.Services.AddSingleton<RegisterViewModel>();
+            builder.Services.AddSingleton<ProfileViewModel>();
             builder.Services.AddSingleton<BookingListViewModel>();
             builder.Services.AddTransient<BookingItemViewModel>();
             return builder.Build();

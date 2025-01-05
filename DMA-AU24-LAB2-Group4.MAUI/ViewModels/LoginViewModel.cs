@@ -36,9 +36,9 @@ namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
             }
 
             // Save customer into Preferences
-            //Preferences.Set("IsLoggedIn", true);
-            //Preferences.Set("CustomerId", customer.Id);
-            //Preferences.Set("CustomerEmail", customer.Email);
+            Preferences.Set("IsLoggedIn", true);
+            Preferences.Set("CustomerId", customer.Id);
+            Preferences.Set("CustomerEmail", customer.Email);
 
 
 
