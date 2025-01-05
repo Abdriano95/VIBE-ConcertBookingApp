@@ -16,11 +16,11 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Services
 {
     public class RestService : IRestService
     {
-        private HttpClient _client;
-        private JsonSerializerOptions _serializerOptions;
-        private IHttpsClientHandlerService _httpsClientHandlerService;
-        private IMapper _mapper;
-        public ObservableCollection<Booking>? Items { get; set; }
+        private readonly HttpClient _client;
+        private readonly JsonSerializerOptions _serializerOptions;
+        private readonly IHttpsClientHandlerService _httpsClientHandlerService;
+        private readonly IMapper _mapper;
+
         public RestService(IHttpsClientHandlerService service, IMapper mapper)
         {
             _mapper = mapper;
@@ -32,7 +32,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Services
             else
                 _client = new HttpClient();
 #else
-_client = new HttpClient();
+        _client = new HttpClient();
 #endif
             _serializerOptions = new JsonSerializerOptions
             {
@@ -40,112 +40,75 @@ _client = new HttpClient();
                 WriteIndented = true
             };
         }
-        public async Task<ObservableCollection<Booking>?> RefreshDataAsync()
-        {
-            Items = new ObservableCollection<Booking>();
-            Uri uri = new Uri(string.Format(Constants.BookingUrl, string.Empty));
-            try
-            {
-                HttpResponseMessage response = await _client.GetAsync(uri);
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    Items = _mapper.Map<List<Booking>>
-                    (
-                    JsonSerializer.Deserialize<List<BookingDto>>(content, _serializerOptions)
-                    ).ToObservableCollection();
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
-            }
-            return Items;
-        }
-        public async Task SaveBookingAsync(Booking booking, bool isNewBooking = false)
-        {
-            Uri uri = new Uri(string.Format(Constants.BookingUrl, string.Empty));
-            try
-            {
-                string json = JsonSerializer.Serialize<BookingDto>(_mapper.Map<BookingDto>(booking),
-                _serializerOptions);
-                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = null!;
-                if (isNewBooking)
-                    response = await _client.PostAsync(uri, content);
-                else
-                    response = await _client.PutAsync(uri, content);
-                if (response.IsSuccessStatusCode)
-                    Debug.WriteLine(@"\tBooking successfully saved.");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
-            }
-        }
-        public async Task DeleteBookingAsync(int id) // bytade från string id till int id, kan behövas att se över
-        {
-            Uri uri = new Uri(string.Format(Constants.BookingUrl, id));
-            try
-            {
-                HttpResponseMessage response = await _client.DeleteAsync(uri);
-                if (response.IsSuccessStatusCode)
-                    Debug.WriteLine(@"\tBooking successfully deleted.");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
-            }
-        }
-        // CUSTOMER
-        public async Task<bool> RegisterCustomerAsync(Customer customer)
-        {
-            try
-            {
-                var dto = _mapper.Map<RegisterCustomerDto>(customer);
-                Uri uri = new Uri(Constants.CustomerRegisterUrl);
-                var response = await _client.PostAsJsonAsync(uri, dto);
-                if (!response.IsSuccessStatusCode)
-                {
-                    Debug.WriteLine($"Registration failed. StatusCode: {response.StatusCode}");
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine($"Error Content: {errorContent}");
-                }
 
+        public async Task<T?> GetAsync<T>(string url)
+        {
+            try
+            {
+                var response = await _client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<T>(_serializerOptions);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in GET: {ex.Message}");
+            }
+            return default;
+        }
+
+        public async Task<IEnumerable<T>?> GetAllAsync<T>(string url)
+        {
+            return await GetAsync<IEnumerable<T>>(url);
+        }
+
+        public async Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest data)
+        {
+            try
+            {
+                var response = await _client.PostAsJsonAsync(url, data, _serializerOptions);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<TResponse>(_serializerOptions);
+                }
+                Debug.WriteLine($"POST failed with status code: {response.StatusCode}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in POST: {ex.Message}");
+            }
+            return default;
+        }
+
+        public async Task<bool> PutAsync<T>(string url, T data)
+        {
+            try
+            {
+                // User _mapper if needed
+                var mappedData = _mapper.Map<T>(data);
+                var response = await _client.PutAsJsonAsync(url, mappedData, _serializerOptions);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                Debug.WriteLine($"Error in PUT: {ex.Message}");
                 return false;
             }
         }
 
-        public async Task<Customer?> LoginAsync(string email, string password)
+        public async Task<bool> DeleteAsync(string url)
         {
             try
             {
-                var loginDto = new LoginDto { Email = email, Password = password };
-                Uri uri = new Uri(Constants.CustomerLoginUrl);
-                var response = await _client.PostAsJsonAsync(uri, loginDto);
-
-                if (!response.IsSuccessStatusCode) return null;
-
-                var customerDto = await response.Content.ReadFromJsonAsync<CustomerDto>(_serializerOptions);
-
-                if (customerDto == null)
-                {
-                    Debug.WriteLine("Failed to deserialize CustomerDto");
-                    return null;
-                }
-                return _mapper.Map<Customer>(customerDto);
+                var response = await _client.DeleteAsync(url);
+                return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
-                return null;
+                Debug.WriteLine($"Error in DELETE: {ex.Message}");
+                return false;
             }
         }
     }
-    }
+}

@@ -78,18 +78,23 @@ namespace DMA_AU24_LAB2_Group4.API.Controllers
             }
         }
 
-        // GET: api/Customer/{id}
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetCustomerById(int id)
+        // POST: api/Customer/getById
+        [HttpPost("getById")]
+        public async Task<IActionResult> GetCustomerById([FromBody] CustomerDto customerDto)
         {
+            if (customerDto == null || customerDto.CustomerID <= 0)
+            {
+                return BadRequest("Invalid customer data.");
+            }
+
             try
             {
-                var customer = await _unitOfWork.Customers.GetCustomerByIdAsync(id);
+                var customer = await _unitOfWork.Customers.GetCustomerByIdAsync(customerDto.CustomerID);
                 if (customer == null)
                     return NotFound();
 
-                var customerDto = _mapper.Map<CustomerDto>(customer);
-                return Ok(customerDto);
+                var resultDto = _mapper.Map<CustomerDto>(customer);
+                return Ok(resultDto);
             }
             catch (Exception ex)
             {
@@ -97,22 +102,53 @@ namespace DMA_AU24_LAB2_Group4.API.Controllers
             }
         }
 
-        // GET: api/Customer/{id}/bookings
-        [HttpGet("{id}/bookings")]
-        public async Task<IActionResult> GetCustomerBookings(int id)
+        // POST: api/Customer/getBookings
+        [HttpPost("getBookings")]
+        public async Task<IActionResult> GetCustomerBookings([FromBody] CustomerDto customerDto)
         {
+            if (customerDto == null || customerDto.CustomerID <= 0)
+            {
+                return BadRequest("Invalid customer data.");
+            }
+
             try
             {
-                var customer = await _unitOfWork.Customers.GetCustomerByIdAsync(id);
+                var customer = await _unitOfWork.Customers.GetCustomerByIdAsync(customerDto.CustomerID);
                 if (customer == null)
                     return NotFound();
-                var bookings = await _unitOfWork.Bookings.GetAllBookingsByCustomerIdAsync(id);
+
+                var bookings = await _unitOfWork.Bookings.GetAllBookingsByCustomerIdAsync(customerDto.CustomerID);
                 var bookingDtos = _mapper.Map<IEnumerable<BookingDto>>(bookings);
                 return Ok(bookingDtos);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { Error = "Could not retrieve customer bookings", Message = ex.Message });
+            }
+        }
+
+
+        // PUT: update customer
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateCustomer([FromBody] UpdateCustomerDto updateDto)
+        {
+            try
+            {
+
+                var customer = await _unitOfWork.Customers.GetCustomerByIdAsync(updateDto.Id);
+                if (customer == null)
+                    return NotFound();
+
+                // update customer
+                _mapper.Map(updateDto, customer);
+                _unitOfWork.Customers.UpdateCustomer(customer);
+                await _unitOfWork.SaveChangesAsync();
+
+                return Ok("Profile updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Error = "Could not update profile", Message = ex.Message });
             }
         }
     }

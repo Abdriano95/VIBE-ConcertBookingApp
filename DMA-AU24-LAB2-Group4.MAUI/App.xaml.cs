@@ -6,6 +6,19 @@
         {
             InitializeComponent();
             MainPage = new AppShell();
+
+            //// Kontrollera om användaren är inloggad
+            //bool isLoggedIn = Preferences.Get("IsLoggedIn", false);
+
+            //if (isLoggedIn)
+            //{
+            //    MainPage = new AppShell();
+            //    Shell.Current.GoToAsync("//ConcertsPage");
+            //}
+            //else
+            //{
+            //    MainPage = new AppShell();
+            //}
         }
     }
 }
