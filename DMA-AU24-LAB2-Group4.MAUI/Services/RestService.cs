@@ -147,5 +147,43 @@ _client = new HttpClient();
                 return null;
             }
         }
+
+        public async Task<Customer?> GetProfileAsync(int customerId)
+        {
+            Uri uri = new Uri(Constants.CustomerProfileUrl);
+            try
+            {
+                var customerDto = new CustomerDto { CustomerID = customerId };
+                Debug.WriteLine($"Sending CustomerDto to API: {customerDto.CustomerID}");
+
+                var response = await _client.PostAsJsonAsync(uri, customerDto);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine($"API call failed with status code: {response.StatusCode}");
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"API error content: {errorContent}");
+                    return null;
+                }
+
+                var fetchedDto = await response.Content.ReadFromJsonAsync<CustomerDto>();
+                Debug.WriteLine($"Received DTO from API: {fetchedDto?.CustomerFirstName}, {fetchedDto?.CustomerLastName}, {fetchedDto?.Email}, {fetchedDto?.Password}");
+                return _mapper.Map<Customer>(fetchedDto);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in GetProfileAsync: {ex.Message}");
+                return null;
+            }
+        }
+
+        public async Task<bool> UpdateProfileAsync(Customer customer)
+        {
+            Uri uri = new Uri(Constants.CustomerUpdateUrl);
+            var updateDto = _mapper.Map<UpdateCustomerDto>(customer);
+            var response = await _client.PutAsJsonAsync(uri, updateDto);
+            return response.IsSuccessStatusCode;
+        }
+
     }
 }

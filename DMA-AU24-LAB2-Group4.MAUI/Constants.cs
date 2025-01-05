@@ -24,7 +24,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI
         public static string BookingUrl = $"{BaseUrl}/booking/{{0}}";
         public static string CustomerRegisterUrl = $"{BaseUrl}/customer/register";
         public static string CustomerLoginUrl = $"{BaseUrl}/customer/login";
-        public static string CustomerProfileUrl = $"{BaseUrl}/customer/profile";
+        public static string CustomerProfileUrl = $"{BaseUrl}/customer/getById";
         public static string CustomerUpdateUrl = $"{BaseUrl}/customer/update";
 
     }

@@ -18,6 +18,9 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Services
         // Customer
         Task<bool> RegisterCustomerAsync(Customer customer);
         Task<Customer?> LoginAsync(string email, string password);
+        Task<Customer?> GetProfileAsync(int customerId);
+        Task<bool> UpdateProfileAsync(Customer customer);
+
 
     }
 }
