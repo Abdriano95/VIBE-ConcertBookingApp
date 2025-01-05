@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DMA_AU24_LAB2_Group4.MAUI.Views.LoginPage"
+             Title="Login">
+
+    <VerticalStackLayout Padding="20">
+        <Entry Placeholder="Email" Text="{Binding Email}" />
+        <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True" />
+        <Button Text="Login" Command="{Binding LoginCommand}" />
+        <Label Text="Don't have an account? Register here" TextColor="Blue" HorizontalOptions="Center">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding NavigateToRegisterCommand}" />
+            </Label.GestureRecognizers>
+        </Label>
+    </VerticalStackLayout>
+</ContentPage>

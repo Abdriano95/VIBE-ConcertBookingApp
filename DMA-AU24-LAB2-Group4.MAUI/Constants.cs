@@ -18,6 +18,11 @@ namespace DMA_AU24_LAB2_Group4.MAUI
         : "localhost";
         public static string Scheme = "https"; // or http
         public static string Port = "5001"; // or 5000
-        public static string RestUrl = $"{Scheme}://{LocalhostUrl}:{Port}/api/booking/{{0}}";
+        public static string BaseUrl = $"{Scheme}://{LocalhostUrl}:{Port}/api";
+
+        // Specific REST URLs
+        public static string BookingUrl = $"{BaseUrl}/booking/{{0}}";
+        public static string CustomerRegisterUrl = $"{BaseUrl}/customer/register";
+        public static string CustomerLoginUrl = $"{BaseUrl}/customer/login";
     }
 }

@@ -10,12 +10,9 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Services
 {
     public interface IRestService
     {
+        // Booking
         Task<ObservableCollection<Booking>?> RefreshDataAsync();
         Task SaveBookingAsync(Booking booking, bool isNewBooking);
         Task DeleteBookingAsync(int id);
-
-        // Methods for concerts
-        Task<ObservableCollection<Concert>?> RefreshConcertDataAsync();
-        Task<Concert?> GetConcertByIdAsync(int id);
     }
 }

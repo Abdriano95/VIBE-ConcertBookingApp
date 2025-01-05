@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ _client = new HttpClient();
         public async Task<ObservableCollection<Booking>?> RefreshDataAsync()
         {
             Items = new ObservableCollection<Booking>();
-            Uri uri = new Uri(string.Format(Constants.RestUrl, string.Empty));
+            Uri uri = new Uri(string.Format(Constants.BookingUrl, string.Empty));
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(uri);
@@ -64,7 +65,7 @@ _client = new HttpClient();
         }
         public async Task SaveBookingAsync(Booking booking, bool isNewBooking = false)
         {
-            Uri uri = new Uri(string.Format(Constants.RestUrl, string.Empty));
+            Uri uri = new Uri(string.Format(Constants.BookingUrl, string.Empty));
             try
             {
                 string json = JsonSerializer.Serialize<BookingDto>(_mapper.Map<BookingDto>(booking),
@@ -85,7 +86,7 @@ _client = new HttpClient();
         }
         public async Task DeleteBookingAsync(int id) 
         {
-            Uri uri = new Uri(string.Format(Constants.RestUrl, id));
+            Uri uri = new Uri(string.Format(Constants.BookingUrl, id));
             try
             {
                 HttpResponseMessage response = await _client.DeleteAsync(uri);
@@ -95,6 +96,55 @@ _client = new HttpClient();
             catch (Exception ex)
             {
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+        }
+        // CUSTOMER
+        public async Task<bool> RegisterCustomerAsync(Customer customer)
+        {
+            try
+            {
+                var dto = _mapper.Map<RegisterCustomerDto>(customer);
+                Uri uri = new Uri(Constants.CustomerRegisterUrl);
+                var response = await _client.PostAsJsonAsync(uri, dto);
+                if (!response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine($"Registration failed. StatusCode: {response.StatusCode}");
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Error Content: {errorContent}");
+                }
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<Customer?> LoginAsync(string email, string password)
+        {
+            try
+            {
+                var loginDto = new LoginDto { Email = email, Password = password };
+                Uri uri = new Uri(Constants.CustomerLoginUrl);
+                var response = await _client.PostAsJsonAsync(uri, loginDto);
+
+                if (!response.IsSuccessStatusCode) return null;
+
+                var customerDto = await response.Content.ReadFromJsonAsync<CustomerDto>(_serializerOptions);
+
+                if (customerDto == null)
+                {
+                    Debug.WriteLine("Failed to deserialize CustomerDto");
+                    return null;
+                }
+                return _mapper.Map<Customer>(customerDto);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                return null;
             }
         }
 
@@ -151,4 +201,4 @@ _client = new HttpClient();
             return concert;
         }
     }
-}
+    }
