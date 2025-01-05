@@ -15,12 +15,14 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Services
         Task SaveBookingAsync(Booking booking, bool isNewBooking);
         Task DeleteBookingAsync(int id);
 
+
         // Customer
         Task<bool> RegisterCustomerAsync(Customer customer);
         Task<Customer?> LoginAsync(string email, string password);
         Task<Customer?> GetProfileAsync(int customerId);
         Task<bool> UpdateProfileAsync(Customer customer);
 
-
+        Task<ObservableCollection<Concert>?> RefreshConcertDataAsync();
+        Task<Concert?> GetConcertByIdAsync(int id);
     }
 }

@@ -84,7 +84,7 @@ _client = new HttpClient();
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
         }
-        public async Task DeleteBookingAsync(int id) // bytade från string id till int id, kan behövas att se över
+        public async Task DeleteBookingAsync(int id) 
         {
             Uri uri = new Uri(string.Format(Constants.BookingUrl, id));
             try
@@ -148,6 +148,7 @@ _client = new HttpClient();
             }
         }
 
+
         public async Task<Customer?> GetProfileAsync(int customerId)
         {
             Uri uri = new Uri(Constants.CustomerProfileUrl);
@@ -183,6 +184,60 @@ _client = new HttpClient();
             var updateDto = _mapper.Map<UpdateCustomerDto>(customer);
             var response = await _client.PutAsJsonAsync(uri, updateDto);
             return response.IsSuccessStatusCode;
+        }
+
+
+        // Methods for Concert - consistent with Booking methods
+
+        public async Task<ObservableCollection<Concert>?> RefreshConcertDataAsync()
+        {
+            ObservableCollection<Concert> concerts = new ObservableCollection<Concert>();
+            Uri uri = new Uri(string.Format(Constants.ConcertUrl, string.Empty));
+
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    // Deserialize ConcertDto list and map to Concert models
+                    var concertDtos = JsonSerializer.Deserialize<List<ConcertDto>>(content, _serializerOptions);
+                    concerts = _mapper.Map<List<Concert>>(concertDtos).ToObservableCollection();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+
+            return concerts;
+        }
+
+        public async Task<Concert?> GetConcertByIdAsync(int id)
+        {
+            Concert? concert = null;
+            Uri uri = new Uri(string.Format(Constants.ConcertUrl, id));
+
+            try
+            {
+                var response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var concertDto = JsonSerializer.Deserialize<ConcertDto>(content, _serializerOptions);
+                    if (concertDto != null)
+                    {
+                        // Map ConcertDto to Concert
+                        concert = _mapper.Map<Concert>(concertDto);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+            }
+
+            return concert;
         }
 
     }
