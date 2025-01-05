@@ -7,8 +7,25 @@ xmlns:local="clr-namespace:DMA_AU24_LAB2_Group4.MAUI"
 xmlns:views="clr-namespace:DMA_AU24_LAB2_Group4.MAUI.Views"
 Title="DMA_AU24_LAB2_Group4.MAUI"
 Shell.FlyoutBehavior="Disabled">
-    <ShellContent
-Title="Home"
-ContentTemplate="{DataTemplate views:BookingListPage}"
-Route="MainPage" />
+
+    <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate views:LoginPage}" />
+    <ShellContent Route="RegisterPage" ContentTemplate="{DataTemplate views:RegisterPage}" />
+
+    <TabBar>
+        <!-- Concerts-->
+        <Tab Title="Concerts" Icon="festival.png">
+            <ShellContent Route="ConcertsPage" ContentTemplate="{DataTemplate views:ConcertsPage}" />
+        </Tab>
+        
+        <!-- My bookings -->
+        <Tab Title="My Bookings" Icon="tickets.png">
+            <ShellContent Route="MyBookingsPage" ContentTemplate="{DataTemplate views:MyBookingsPage}" />
+        </Tab>
+        
+        <!-- Profile -->
+        <Tab Title="Profile" Icon="user.png">
+            <ShellContent Route="ProfilePage" ContentTemplate="{DataTemplate views:ProfilePage}" />
+        </Tab>
+
+    </TabBar>
 </Shell>
