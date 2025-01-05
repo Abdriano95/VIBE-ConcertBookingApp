@@ -29,6 +29,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI
             builder.Services.AddSingleton<IRestService, RestService>();
             builder.Services.AddSingleton<IBookingService, BookingService>();
             builder.Services.AddSingleton<ICustomerService, CustomerService>();
+            builder.Services.AddSingleton<IConcertService, ConcertService>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddAutoMapper(typeof(CustomerProfile));
 
@@ -47,6 +48,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI
             builder.Services.AddSingleton<RegisterViewModel>();
             builder.Services.AddSingleton<BookingListViewModel>();
             builder.Services.AddTransient<BookingItemViewModel>();
+            builder.Services.AddSingleton<ConcertViewModel>();
             return builder.Build();
         }
     }
