@@ -10,36 +10,22 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Services
 {
     public class BookingService : IBookingService
     {
-        //IRestService _restService;
-        //public BookingService(IRestService service)
-        //{
-        //    _restService = service;
-        //}
-        //public Task<ObservableCollection<Booking>?> GetBookingAsync()
-        //{
-        //    return _restService.RefreshDataAsync();
-        //}
-        //public Task SaveBookingAsync(Booking booking, bool isNewBooking = false)
-        //{
-        //    return _restService.SaveBookingAsync(booking, isNewBooking);
-        //}
-        //public Task DeleteBookingAsync(Booking booking)
-        //{
-        //    return _restService.DeleteBookingAsync(booking.Id);
-        //}
-        public Task DeleteBookingAsync(Booking booking)
+        IRestService _restService;
+        public BookingService(IRestService service)
         {
-            throw new NotImplementedException();
+            _restService = service;
         }
-
         public Task<ObservableCollection<Booking>?> GetBookingAsync()
         {
-            throw new NotImplementedException();
+            return _restService.RefreshDataAsync();
         }
-
-        public Task SaveBookingAsync(Booking booking, bool isNewBooking)
+        public Task SaveBookingAsync(Booking booking, bool isNewBooking = false)
         {
-            throw new NotImplementedException();
+            return _restService.SaveBookingAsync(booking, isNewBooking);
+        }
+        public Task DeleteBookingAsync(Booking booking)
+        {
+            return _restService.DeleteBookingAsync(booking.Id);
         }
     }
 }
