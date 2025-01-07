@@ -4,59 +4,63 @@ using DMA_AU24_LAB2_Group4.MAUI.Models;
 using DMA_AU24_LAB2_Group4.MAUI.Services;
 using DMA_AU24_LAB2_Group4.MAUI.Views;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
 {
-    [ObservableObject]
-    public partial class ConcertViewModel
+    public partial class ConcertViewModel : ObservableObject
     {
         private readonly IRestService _restService;
 
         [ObservableProperty]
-        private ObservableCollection<Concert> concertItems = new();
+        private ObservableCollection<Concert> concertItems;
 
         [ObservableProperty]
-        private Concert? selectedConcert;
+        private Concert selectedConcert;
 
         public ConcertViewModel(IRestService restService)
         {
             _restService = restService;
+            LoadConcertsCommand.Execute(null);
         }
 
         [RelayCommand]
-        public async Task Appearing()
+        public async Task LoadConcertsAsync()
         {
-             var concerts = await _restService.RefreshConcertDataAsync(); // Ensure you're calling RefreshConcertDataAsync
-            ConcertItems = concerts ?? new ObservableCollection<Concert>(); // Set ConcertItems
-
-            // concertItems = new(await _restService.RefreshConcertDataAsync() ?? new ObservableCollection<Concert>());
-
-        }
-
-        [RelayCommand]
-        public async Task SelectionChanged(Concert selectedConcert)
-        {
-            if (selectedConcert == null) return;
-
-            var concertId = selectedConcert.Id;
-            var navigationParameter = new Dictionary<string, object>
+            try
             {
-                { nameof(Concert), selectedConcert }
-            };
-            //await Shell.Current.GoToAsync("PerformancePage", navigationParameter);
-            //await Shell.Current.GoToAsync($"{nameof(PerformancePage)}?concertId={concertId}");
-            await Shell.Current.GoToAsync($"///PerformancePage", navigationParameter);
-            SelectedConcert = null;
+                // Fetch all concerts
+                var concerts = await _restService.RefreshConcertDataAsync();
+                ConcertItems = concerts ?? new ObservableCollection<Concert>();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading concerts: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("Error", "Failed to load concerts.", "OK");
+            }
         }
 
         [RelayCommand]
         public async Task ShowPerformances(Concert concert)
         {
             if (concert == null)
+            {
+                Debug.WriteLine("Concert is null.");
                 return;
+            }
 
-            await Shell.Current.GoToAsync($"{nameof(PerformancePage)}?ConcertId={concert.Id}");
+            try
+            {
+                Debug.WriteLine($"Navigating to performances for ConcertId: {concert.Id}");
+                await Shell.Current.GoToAsync($"PerformancePage?ConcertId={concert.Id}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error navigating to PerformancePage: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("Error", "Failed to navigate to performances.", "OK");
+            }
         }
+
 
     }
 }

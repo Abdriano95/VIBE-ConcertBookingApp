@@ -85,6 +85,39 @@ _client = new HttpClient();
             }
         }
 
+        public async Task<bool> CreateBookingAsync(BookingCreateDto bookingDto)
+        {
+            Uri uri = new Uri($"{Constants.BaseUrl}/booking");
+
+            try
+            {
+                string json = JsonSerializer.Serialize(bookingDto, _serializerOptions);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response = await _client.PostAsync(uri, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine("Booking successfully created.");
+                    return true;
+                }
+                else
+                {
+                    Debug.WriteLine($"API call failed with status code: {response.StatusCode}");
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Error content: {errorContent}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in CreateBookingAsync: {ex.Message}");
+            }
+
+            return false;
+        }
+
+
+
         public async Task<Booking?> GetBookingByIdAsync(int bookingId)
         {
             Uri uri = new Uri($"{Constants.BaseUrl}/booking/{bookingId}");
@@ -343,6 +376,8 @@ _client = new HttpClient();
 
             try
             {
+                Debug.WriteLine($"Fetching available performances for ConcertId: {concertId} and CustomerId: {customerId}");
+
                 HttpResponseMessage response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode)
                 {

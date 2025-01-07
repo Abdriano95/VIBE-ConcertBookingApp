@@ -38,16 +38,16 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Profiles
                 .ForMember(dest => dest.ConcertTitle, opt => opt.MapFrom(src => src.ConcertTitle));
 
 
-            // Add the mapping for BookingCreateDto to Booking
-            //    CreateMap<BookingCreateDto, Booking>()
-            //        .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
-            //        .ForMember(dest => dest.PerformanceId, opt => opt.MapFrom(src => src.PerformanceId));
+            //    Add the mapping for BookingCreateDto to Booking
 
-            //    // If you need a reverse map from Booking to BookingCreateDto (optional), you can define it here
-            //    CreateMap<Booking, BookingCreateDto>()
-            //        .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
-            //        .ForMember(dest => dest.PerformanceId, opt => opt.MapFrom(src => src.PerformanceId));
-            //}
+            CreateMap<BookingCreateDto, Booking>()
+                .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
+                .ForMember(dest => dest.PerformanceId, opt => opt.MapFrom(src => src.PerformanceId));
+
+            // If you need a reverse map from Booking to BookingCreateDto (optional), you can define it here
+            CreateMap<Booking, BookingCreateDto>()
+                .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
+                .ForMember(dest => dest.PerformanceId, opt => opt.MapFrom(src => src.PerformanceId));
         }
     }
-}
+    }
