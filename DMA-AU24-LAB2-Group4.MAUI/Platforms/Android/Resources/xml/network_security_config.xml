@@ -2,8 +2,8 @@
 <network-security-config>
 	<domain-config cleartextTrafficPermitted="true">
 		<domain includeSubdomains="true">10.0.2.2</domain>
-		<!-- Change 192.168.50.158 to your local computer's IP
+		<!-- Change 192.168.50.158 100.71.109.122to your local computer's IP
 address if your debug target is a physical android device-->
-		<domain includeSubdomains="true">100.71.109.122</domain>
+		<domain includeSubdomains="true">192.168.50.158 </domain>
 	</domain-config>
 </network-security-config>

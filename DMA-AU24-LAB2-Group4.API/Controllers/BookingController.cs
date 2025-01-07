@@ -41,14 +41,17 @@ namespace DMA_AU24_LAB2_Group4.API.Controllers
         {
             var booking = await _unitOfWork.Bookings.GetAllBookingDetailsByIdAsync(id);
 
-            // Check if no bookings were found for the provided ID
+            // Control if the booking is null or empty
             if (booking == null || !booking.Any())
             {
                 return NotFound(ErrorCode.BookingIDNotFound.ToString());
             }
 
-            return Ok(_mapper.Map<IEnumerable<BookingDto>>(booking));
+            // Gets the first booking from the list and maps it to a BookingDto object
+            var bookingDto = _mapper.Map<BookingDto>(booking.First());
+            return Ok(bookingDto);
         }
+
 
         [HttpGet("customer/{customerId}")]
         public async Task<IActionResult> ListByCustomerId(int customerId)

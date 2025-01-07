@@ -5,17 +5,22 @@
         public App()
         {
             InitializeComponent();
-            // Kontrollera om användaren är inloggad
-            bool isLoggedIn = Preferences.Get("IsLoggedIn", false);
 
+            // navigate based on login status
+            MainPage = new AppShell();
+            NavigateBasedOnLoginStatus();
+        }
+
+        private async void NavigateBasedOnLoginStatus()
+        {
+            bool isLoggedIn = Preferences.Get("IsLoggedIn", false);
             if (isLoggedIn)
             {
-                MainPage = new AppShell();
-                Shell.Current.GoToAsync("//ConcertsPage");
+                await Shell.Current.GoToAsync("//ConcertsPage");
             }
             else
             {
-                MainPage = new AppShell();
+                await Shell.Current.GoToAsync("//LoginPage");
             }
         }
     }

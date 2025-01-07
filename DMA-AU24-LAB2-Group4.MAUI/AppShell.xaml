@@ -31,4 +31,8 @@ Shell.FlyoutBehavior="Disabled">
 
     <!-- PerformancePage route -->
     <ShellContent Route="PerformancePage" ContentTemplate="{DataTemplate views:PerformancePage}" />
+
+    <!-- BookingDetailsPage route -->
+    <ShellContent Route="BookingDetailsPage" ContentTemplate="{DataTemplate views:BookingDetailsPage}" />
+
 </Shell>

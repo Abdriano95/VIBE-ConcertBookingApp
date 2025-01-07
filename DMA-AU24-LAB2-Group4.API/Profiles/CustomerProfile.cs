@@ -39,9 +39,13 @@ namespace DMA_AU24_LAB2_Group4.API.Profiles
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password));
 
-           
-            // Map Entity to DTO
-            CreateMap<Customer, UpdateCustomerDto>().ReverseMap();
+            // Map Customer to UpdateCustomerDto
+            CreateMap<Customer, UpdateCustomerDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForSourceMember(src => src.Password, opt => opt.DoNotValidate());
         }
     }
 }

@@ -2,9 +2,9 @@ using DMA_AU24_LAB2_Group4.MAUI.ViewModels;
 
 namespace DMA_AU24_LAB2_Group4.MAUI.Views;
 
-public partial class MyBookingsPage : ContentPage
+public partial class BookingDetailsPage : ContentPage
 {
-	public MyBookingsPage(MyBookingsViewModel viewModel)
+	public BookingDetailsPage(BookingDetailsViewModel viewModel)
 	{
 		InitializeComponent();
         BindingContext = viewModel;

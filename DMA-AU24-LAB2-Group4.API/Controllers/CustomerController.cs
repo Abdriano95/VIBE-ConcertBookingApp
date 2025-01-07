@@ -79,15 +79,15 @@ namespace DMA_AU24_LAB2_Group4.API.Controllers
             }
         }
 
-        // POST: api/Customer/getById
-        [HttpPost("getById")]
-        public async Task<IActionResult> GetCustomerById([FromBody] CustomerDto customerDto)
+        // GET: api/Customer/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCustomerById(int id)
         {
             try
             {
-                Debug.WriteLine($"Received CustomerId: {customerDto.CustomerID}");
+                Debug.WriteLine($"Received CustomerId: {id}");
 
-                var customer = await _unitOfWork.Customers.GetCustomerByIdAsync(customerDto.CustomerID);
+                var customer = await _unitOfWork.Customers.GetCustomerByIdAsync(id);
                 if (customer == null)
                 {
                     Debug.WriteLine("Customer not found.");
@@ -104,6 +104,7 @@ namespace DMA_AU24_LAB2_Group4.API.Controllers
                 return StatusCode(500, new { Error = "Could not retrieve customer", Message = ex.Message });
             }
         }
+
 
 
         // POST: api/Customer/getBookings
