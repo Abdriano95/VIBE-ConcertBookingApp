@@ -27,15 +27,5 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Services
         {
             return _restService.GetConcertByIdAsync(id);
         }
-
-        [RelayCommand]
-        public async Task ShowPerformances(Concert concert)
-        {
-        //    if (concert == null)
-        //        return;
-
-        //    await Shell.Current.GoToAsync($"{nameof(PerformancePage)}?ConcertId={concert.Id}");
-            throw new NotImplementedException();
-        }
     }
 }

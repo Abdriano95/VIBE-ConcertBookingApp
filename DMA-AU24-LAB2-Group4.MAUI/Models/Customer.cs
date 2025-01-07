@@ -15,7 +15,6 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Models
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string? ConfirmPassword { get; set; }
-        //Navigation properties
-        public ICollection<Booking>? Bookings { get; set; }
+        
     }
 }

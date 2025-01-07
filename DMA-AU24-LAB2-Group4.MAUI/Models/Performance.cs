@@ -15,11 +15,8 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Models
         public string Venue { get; set; } = null!;
         public string City { get; set; } = null!;
         public string Country { get; set; } = null!;
-        public int ConcertId { get; set; } = 0!;
 
         //Navigation properties
-        public Concert? Concert { get; set; }
-
-        public ICollection<Booking>? Bookings { get; set; }
+        public Concert? Concert { get; set; }    
     }
 }

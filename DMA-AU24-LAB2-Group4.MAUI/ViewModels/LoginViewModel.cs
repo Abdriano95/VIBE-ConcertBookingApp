@@ -1,13 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DMA_AU24_LAB2_Group4.MAUI.Services;
-using Microsoft.Maui.Storage;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
 {

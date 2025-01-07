@@ -193,7 +193,7 @@ _client = new HttpClient();
             }
         }
 
-        // CUSTOMER
+        
         public async Task<bool> RegisterCustomerAsync(Customer customer)
         {
             try
