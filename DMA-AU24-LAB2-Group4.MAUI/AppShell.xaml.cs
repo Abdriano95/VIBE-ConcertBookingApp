@@ -11,6 +11,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI
             Routing.RegisterRoute(nameof(ConcertsPage), typeof(ConcertsPage));
             Routing.RegisterRoute(nameof(ProfilePage), typeof(ProfilePage));
             Routing.RegisterRoute(nameof(MyBookingsPage), typeof(MyBookingsPage));
+            Routing.RegisterRoute(nameof(PerformancePage), typeof(PerformancePage));
             Routing.RegisterRoute(nameof(BookingDetailsPage), typeof(BookingDetailsPage));
 
 

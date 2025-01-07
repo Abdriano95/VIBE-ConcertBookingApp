@@ -18,6 +18,8 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Services
         Task<bool> DeleteBookingAsync(int bookingId);
         Task<Booking?> GetBookingByIdAsync(int bookingId);
 
+        // Performances
+        Task<ObservableCollection<Performance>> GetAvailablePerformancesAsync(int concertId, int customerId);
 
 
         // Customer
@@ -26,6 +28,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Services
         Task<Customer?> GetProfileAsync(int customerId);
         Task<bool> UpdateProfileAsync(Customer customer);
 
+        // Concert
         Task<ObservableCollection<Concert>?> RefreshConcertDataAsync();
         Task<Concert?> GetConcertByIdAsync(int id);
     }

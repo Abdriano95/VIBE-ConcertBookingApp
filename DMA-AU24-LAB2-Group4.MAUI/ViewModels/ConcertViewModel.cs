@@ -48,5 +48,15 @@ namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
             await Shell.Current.GoToAsync($"///PerformancePage", navigationParameter);
             SelectedConcert = null;
         }
+
+        [RelayCommand]
+        public async Task ShowPerformances(Concert concert)
+        {
+            if (concert == null)
+                return;
+
+            await Shell.Current.GoToAsync($"{nameof(PerformancePage)}?ConcertId={concert.Id}");
+        }
+
     }
 }
