@@ -21,7 +21,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Entity
         //Navigation properties
         public Concert? Concert { get; set; }
 
-        public ICollection<Booking>? Bookings { get; set; }
+        public ICollection<Booking>? Bookings { get; set; } = new List<Booking>();
 
     }
 }

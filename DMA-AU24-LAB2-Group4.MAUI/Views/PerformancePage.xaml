@@ -2,15 +2,34 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DMA_AU24_LAB2_Group4.MAUI.ViewModels"
+             xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="DMA_AU24_LAB2_Group4.MAUI.Views.PerformancePage"
-             Title="Performance Details">
+             Title="Available performences">
 
-    <ContentPage.BindingContext>
-        <vm:PerformanceViewModel />
-    </ContentPage.BindingContext>
+    <ContentPage.Behaviors>
+        <!-- Triggar data laddning vid sidan laddas -->
+        <behaviors:EventToCommandBehavior Command="{Binding LoadAvailablePerformancesAsyncCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
 
-    <VerticalStackLayout Padding="20">
-        <Label Text="Performance Details" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
-        <Label Text="{Binding PerformanceDetails}" FontSize="16" />
+    <VerticalStackLayout Padding="10" Spacing="10">
+        <CollectionView ItemsSource="{Binding Performances}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="10" Margin="5" BackgroundColor="LightGray" CornerRadius="5">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Venue}" FontSize="18" FontAttributes="Bold" />
+                            <Label Text="{Binding City}" FontSize="16" />
+                            <Label Text="{Binding Country}" FontSize="16" />
+                            <Label Text="{Binding PerformanceDate, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" FontSize="14" />
+                            <Label Text="{Binding ConcertTitle}" FontSize="14" FontAttributes="Italic" />
+
+                            <Button Text="Book"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PerformanceViewModel}}, Path=BookCommand}"
+                                    CommandParameter="{Binding}" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>

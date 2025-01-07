@@ -335,5 +335,35 @@ _client = new HttpClient();
             return concert;
         }
 
+        // Performences methods
+        public async Task<ObservableCollection<Performance>> GetAvailablePerformancesAsync(int concertId, int customerId)
+        {
+            ObservableCollection<Performance> performances = new ObservableCollection<Performance>();
+            Uri uri = new Uri($"{Constants.BaseUrl}/performance/available/{concertId}/{customerId}");
+
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonContent = await response.Content.ReadAsStringAsync();
+                    var performanceDtos = JsonSerializer.Deserialize<List<PerformanceDto>>(jsonContent, _serializerOptions);
+                    performances = new ObservableCollection<Performance>(_mapper.Map<List<Performance>>(performanceDtos));
+                }
+                else
+                {
+                    Debug.WriteLine($"API call failed with status code: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in GetAvailablePerformancesAsync: {ex.Message}");
+            }
+
+            return performances;
+        }
+
+
+
     }
 }

@@ -41,6 +41,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<MyBookingsPage>();
             builder.Services.AddTransient<BookingDetailsPage>();
+            builder.Services.AddTransient<PerformancePage>();
 
             // ViewModels
             builder.Services.AddSingleton<LoginViewModel>();
@@ -49,6 +50,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI
             builder.Services.AddSingleton<ConcertViewModel>();
             builder.Services.AddSingleton<MyBookingsViewModel>();
             builder.Services.AddSingleton<BookingDetailsViewModel>();
+            builder.Services.AddSingleton<PerformanceViewModel>();
             return builder.Build();
         }
     }

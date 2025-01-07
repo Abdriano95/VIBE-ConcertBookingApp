@@ -1,29 +1,41 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DMA_AU24_LAB2_Group4.MAUI.Models;
+using DMA_AU24_LAB2_Group4.MAUI.Services;
 using System.Collections.ObjectModel;
 
 namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
 {
-    [ObservableObject]
-    public partial class PerformanceViewModel
+    [QueryProperty(nameof(ConcertId), "ConcertId")]
+    public partial class PerformanceViewModel : ObservableObject
     {
-        [ObservableProperty]
-        private string performanceDetails;
+        private readonly IRestService _restService;
 
-        public PerformanceViewModel()
+        [ObservableProperty]
+        private ObservableCollection<Performance> performances;
+
+        [ObservableProperty]
+        private int concertId;
+
+        public PerformanceViewModel(IRestService restService)
         {
-            // Default state
-            PerformanceDetails = "Loading performance details...";
+            _restService = restService;
+
+            // Load available performances
         }
 
         [RelayCommand]
-        public async Task LoadPerformanceDetails(string concertId)
+        public async Task LoadAvailablePerformancesAsync()
         {
-            if (string.IsNullOrEmpty(concertId)) return;
+            int customerId = Preferences.Get("CustomerId", 0);
 
-            // Simulate loading data
-            await Task.Delay(500); // Replace with actual API or service call
-            PerformanceDetails = $"Details for concert ID: {concertId}";
+            if (customerId == 0)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "No customer ID found. Please log in.", "OK");
+                return;
+            }
+
+            Performances = await _restService.GetAvailablePerformancesAsync(ConcertId, customerId);
         }
     }
 }

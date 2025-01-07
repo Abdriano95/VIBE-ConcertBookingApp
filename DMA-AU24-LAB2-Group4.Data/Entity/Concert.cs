@@ -14,6 +14,6 @@ namespace DMA_AU24_LAB2_Group4.Data.Entity
         public required string Description { get; set; }
 
         //Navigation properties
-        public ICollection<Performance>? Performances { get; set; }
+        public ICollection<Performance> Performances = new List<Performance>();
     }
 }

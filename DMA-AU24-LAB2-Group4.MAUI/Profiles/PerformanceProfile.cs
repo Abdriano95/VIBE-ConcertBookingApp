@@ -22,7 +22,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Profiles
                 .ForMember(dest => dest.Venue, opt => opt.MapFrom(src => src.Venue))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
-                .ForMember(dest => dest.ConcertTitle, opt => opt.MapFrom(src => src.Concert.Title));
+                .ForPath(dest => dest.ConcertTitle, opt => opt.MapFrom(src => src.Concert.Title));
 
             // Map DTO to Entity
             // Note that ConcertTitle does not exists in the Performance entity, it is a derived property from the Concert entity.
@@ -32,7 +32,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Profiles
                 .ForMember(dest => dest.PerformanceDateAndTime, opt => opt.MapFrom(src => src.PerformanceDate))
                 .ForMember(dest => dest.Venue, opt => opt.MapFrom(src => src.Venue))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
-                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country));
+                .ForPath(dest => dest.Country, opt => opt.MapFrom(src => src.Country));
         }
     }
 }

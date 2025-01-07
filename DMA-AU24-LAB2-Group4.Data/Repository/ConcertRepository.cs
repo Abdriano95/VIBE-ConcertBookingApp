@@ -24,10 +24,18 @@ namespace DMA_AU24_LAB2_Group4.Data.Repository
 
         public async Task<Concert> GetConcertAsync(int id)
         {
-            // Fetch the concert by its primary key and include performances
-            return await DbContext.Concerts
-                .Include(c => c.Performances) // Include performances to load related data
-                .FirstOrDefaultAsync(c => c.Id == id); // Match the primary key
+            var concert = await DbContext.Concerts
+                         .Include(c => c.Performances)
+                         .ThenInclude(p => p.Bookings) 
+                         .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (concert == null)
+            {
+                throw new KeyNotFoundException($"Concert with ID {id} not found.");
+            }
+
+            return concert;
         }
+
     }
 }
