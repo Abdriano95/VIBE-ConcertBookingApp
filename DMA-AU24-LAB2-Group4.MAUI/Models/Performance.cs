@@ -11,7 +11,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Models
     public class Performance
     {
         public int Id { get; set; } = 0!;
-        public DateTime PerformanceDateAndTime { get; set; } = DateTime.Now;
+        public DateTime PerformanceDateAndTime { get; set; }
         public string Venue { get; set; } = null!;
         public string City { get; set; } = null!;
         public string Country { get; set; } = null!;

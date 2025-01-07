@@ -7,8 +7,7 @@
              Title="Available performences">
 
     <ContentPage.Behaviors>
-        <!-- Triggar data laddning vid sidan laddas -->
-        <behaviors:EventToCommandBehavior Command="{Binding LoadAvailablePerformancesAsyncCommand}" EventName="Appearing" />
+        <behaviors:EventToCommandBehavior EventName="Loaded" Command="{Binding LoadAvailablePerformancesAsyncCommand}" />
     </ContentPage.Behaviors>
 
     <VerticalStackLayout Padding="10" Spacing="10">
@@ -20,12 +19,11 @@
                             <Label Text="{Binding Venue}" FontSize="18" FontAttributes="Bold" />
                             <Label Text="{Binding City}" FontSize="16" />
                             <Label Text="{Binding Country}" FontSize="16" />
-                            <Label Text="{Binding PerformanceDate, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" FontSize="14" />
-                            <Label Text="{Binding ConcertTitle}" FontSize="14" FontAttributes="Italic" />
+                            <Label Text="{Binding PerformanceDateAndTime, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" FontSize="14" />
 
                             <Button Text="Book"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PerformanceViewModel}}, Path=BookCommand}"
-                                    CommandParameter="{Binding}" />
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:PerformanceViewModel}}, Path=BookPerformanceAsyncCommand}"
+                                    CommandParameter="{Binding .}" />
                         </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>

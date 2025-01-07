@@ -19,6 +19,10 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Models
         public string City { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
         public string ConcertTitle { get; set; } = string.Empty;
+
+        //Customer id and performance id are foreign keys
+        public int CustomerId { get; set; }
+        public int PerformanceId { get; set; }
     }
 
 }

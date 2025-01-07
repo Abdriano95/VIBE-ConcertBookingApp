@@ -2,13 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using DMA_AU24_LAB2_Group4.MAUI.Models;
 using DMA_AU24_LAB2_Group4.MAUI.Services;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
 {
