@@ -84,20 +84,82 @@ _client = new HttpClient();
                 Debug.WriteLine(@"\tERROR {0}", ex.Message);
             }
         }
-        public async Task DeleteBookingAsync(int id) 
+
+        public async Task<Booking?> GetBookingByIdAsync(int bookingId)
         {
-            Uri uri = new Uri(string.Format(Constants.BookingUrl, id));
+            Uri uri = new Uri($"{Constants.BaseUrl}/booking/{bookingId}");
             try
             {
-                HttpResponseMessage response = await _client.DeleteAsync(uri);
+                Debug.WriteLine($"Fetching booking details from API: {uri}");
+
+                HttpResponseMessage response = await _client.GetAsync(uri);
+
                 if (response.IsSuccessStatusCode)
-                    Debug.WriteLine(@"\tBooking successfully deleted.");
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Received JSON: {json}");
+
+                    // Explicit deserialisering
+                    var bookingDto = JsonSerializer.Deserialize<BookingDto>(json, _serializerOptions);
+                    if (bookingDto != null)
+                    {
+                        Debug.WriteLine($"Deserialized BookingDto: {bookingDto.ConcertTitle}, {bookingDto.PerformanceDate}");
+                        return _mapper.Map<Booking>(bookingDto);
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine($"API call failed with status code: {response.StatusCode}");
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"API error content: {errorContent}");
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(@"\tERROR {0}", ex.Message);
+                Debug.WriteLine($"Exception in GetBookingByIdAsync: {ex.Message}");
+            }
+
+            return null;
+        }
+
+
+
+        public async Task<IEnumerable<Booking>> GetBookingsByCustomerIdAsync(int customerId)
+        {
+            Uri uri = new Uri($"{Constants.BaseUrl}/booking/customer/{customerId}");
+            try
+            {
+                var response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    var bookingDtos = await response.Content.ReadFromJsonAsync<IEnumerable<BookingDto>>();
+                    return _mapper.Map<IEnumerable<Booking>>(bookingDtos);
+                }
+
+                Debug.WriteLine($"Failed to fetch bookings. Status code: {response.StatusCode}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in GetBookingsByCustomerIdAsync: {ex.Message}");
+            }
+            return Enumerable.Empty<Booking>();
+        }
+
+        public async Task<bool> DeleteBookingAsync(int bookingId)
+        {
+            Uri uri = new Uri($"{Constants.BaseUrl}/booking/{bookingId}");
+            try
+            {
+                var response = await _client.DeleteAsync(uri);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in DeleteBookingAsync: {ex.Message}");
+                return false;
             }
         }
+
         // CUSTOMER
         public async Task<bool> RegisterCustomerAsync(Customer customer)
         {
@@ -151,40 +213,71 @@ _client = new HttpClient();
 
         public async Task<Customer?> GetProfileAsync(int customerId)
         {
-            Uri uri = new Uri(Constants.CustomerProfileUrl);
+            Uri uri = new Uri($"{Constants.BaseUrl}/customer/{customerId}");
+            Debug.WriteLine($"Fetching profile for CustomerId: {customerId} from {uri}");
+
             try
             {
-                var customerDto = new CustomerDto { CustomerID = customerId };
-                Debug.WriteLine($"Sending CustomerDto to API: {customerDto.CustomerID}");
+                var response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Received JSON: {json}");
 
-                var response = await _client.PostAsJsonAsync(uri, customerDto);
+                    var customerDto = JsonSerializer.Deserialize<CustomerDto>(json, _serializerOptions);
+                    Debug.WriteLine($"Deserialized CustomerDto: {customerDto?.CustomerFirstName}, {customerDto?.CustomerLastName}");
 
-                if (!response.IsSuccessStatusCode)
+                    return _mapper.Map<Customer>(customerDto);
+                }
+                else
                 {
                     Debug.WriteLine($"API call failed with status code: {response.StatusCode}");
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine($"API error content: {errorContent}");
-                    return null;
                 }
-
-                var fetchedDto = await response.Content.ReadFromJsonAsync<CustomerDto>();
-                Debug.WriteLine($"Received DTO from API: {fetchedDto?.CustomerFirstName}, {fetchedDto?.CustomerLastName}, {fetchedDto?.Email}, {fetchedDto?.Password}");
-                return _mapper.Map<Customer>(fetchedDto);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Exception in GetProfileAsync: {ex.Message}");
-                return null;
             }
+
+            return null;
         }
+
+
 
         public async Task<bool> UpdateProfileAsync(Customer customer)
         {
-            Uri uri = new Uri(Constants.CustomerUpdateUrl);
-            var updateDto = _mapper.Map<UpdateCustomerDto>(customer);
-            var response = await _client.PutAsJsonAsync(uri, updateDto);
-            return response.IsSuccessStatusCode;
+            Uri uri = new Uri($"{Constants.BaseUrl}/customer/update");
+            try
+            {
+                var updateDto = _mapper.Map<UpdateCustomerDto>(customer);
+                Debug.WriteLine($"Mapped UpdateCustomerDto: {updateDto.FirstName}, {updateDto.LastName}, {updateDto.Email}, {updateDto.Password}");
+
+                string json = JsonSerializer.Serialize(updateDto, _serializerOptions);
+                Debug.WriteLine($"Serialized JSON: {json}");
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _client.PutAsync(uri, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine("Profile updated successfully.");
+                    return true;
+                }
+                else
+                {
+                    Debug.WriteLine($"API call failed with status code: {response.StatusCode}");
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"API error content: {errorContent}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception in UpdateProfileAsync: {ex.Message}");
+            }
+
+            return false;
         }
+
 
 
         // Methods for Concert - consistent with Booking methods

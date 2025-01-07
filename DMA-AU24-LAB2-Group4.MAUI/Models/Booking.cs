@@ -10,11 +10,15 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Models
 {
     public class Booking
     {
-        public int Id { get; set; } = 0!;
-        public int? PerformanceId { get; set; }
-        public int? CustomerId { get; set; }
-        //Navigation properties
-        public Performance? Performance { get; set; }
-        public Customer? Customer { get; set; }
+        public int BookingId { get; set; }
+        public string CustomerFirstName { get; set; } = string.Empty;
+        public string CustomerLastName { get; set; } = string.Empty;
+        public string CustomerEmail { get; set; } = string.Empty;
+        public DateTime PerformanceDate { get; set; }
+        public string Venue { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
+        public string ConcertTitle { get; set; } = string.Empty;
     }
+
 }

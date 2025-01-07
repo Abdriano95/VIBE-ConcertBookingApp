@@ -36,20 +36,19 @@ namespace DMA_AU24_LAB2_Group4.MAUI
             // Pages
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
-            builder.Services.AddTransient<BookingListPage>();
-            builder.Services.AddTransient<BookingItemPage>();
             builder.Services.AddTransient<ConcertsPage>();
             builder.Services.AddTransient<AppShell>();
             builder.Services.AddTransient<ProfilePage>();
             builder.Services.AddTransient<MyBookingsPage>();
+            builder.Services.AddTransient<BookingDetailsPage>();
 
             // ViewModels
             builder.Services.AddSingleton<LoginViewModel>();
             builder.Services.AddSingleton<RegisterViewModel>();
             builder.Services.AddSingleton<ProfileViewModel>();
-            builder.Services.AddSingleton<BookingListViewModel>();
-            builder.Services.AddTransient<BookingItemViewModel>();
             builder.Services.AddSingleton<ConcertViewModel>();
+            builder.Services.AddSingleton<MyBookingsViewModel>();
+            builder.Services.AddSingleton<BookingDetailsViewModel>();
             return builder.Build();
         }
     }

@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="DMA_AU24_LAB2_Group4.MAUI.Views.ProfilePage"
              Title="Profile Page">
-    <VerticalStackLayout>
-        <Entry Placeholder="First Name" Text="{Binding Customer.FirstName}" />
-        <Entry Placeholder="Last Name" Text="{Binding Customer.LastName}" />
-        <Entry Placeholder="Email" Text="{Binding Customer.Email}" />
-        <Entry Placeholder="Password" Text="{Binding Customer.Password}" IsPassword="True" />
+
+    <ContentPage.Behaviors>
+        <behaviors:EventToCommandBehavior EventName="Appearing" Command="{Binding LoadProfileCommand}" />
+    </ContentPage.Behaviors>
+    
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <!-- First Name -->
+        <Entry Placeholder="First Name" Text="{Binding FirstName}" />
+        <Label Text="{Binding [FirstName].ErrorContent}" TextColor="Red" IsVisible="{Binding [FirstName].HasError}" />
+
+        <!-- Last Name -->
+        <Entry Placeholder="Last Name" Text="{Binding LastName}" />
+        <Label Text="{Binding [LastName].ErrorContent}" TextColor="Red" IsVisible="{Binding [LastName].HasError}" />
+
+        <!-- Email -->
+        <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
+        <Label Text="{Binding [Email].ErrorContent}" TextColor="Red" IsVisible="{Binding [Email].HasError}" />
+
+        <!-- Password -->
+        <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True" />
+        <Label Text="{Binding [Password].ErrorContent}" TextColor="Red" IsVisible="{Binding [Password].HasError}" />
+
+        <!-- Buttons -->
         <Button Text="Update Profile" Command="{Binding UpdateProfileCommand}" />
-        <Button Text="Logout" Command="{Binding LogoutCommand}" />
+        <Button Text="Logout" Command="{Binding LogoutCommand}" BackgroundColor="Red" TextColor="White" />
     </VerticalStackLayout>
 </ContentPage>

@@ -25,7 +25,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Services
         }
         public Task DeleteBookingAsync(Booking booking)
         {
-            return _restService.DeleteBookingAsync(booking.Id);
+            return _restService.DeleteBookingAsync(booking.BookingId);
         }
     }
 }
