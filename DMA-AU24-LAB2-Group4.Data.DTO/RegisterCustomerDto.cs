@@ -25,7 +25,6 @@ namespace DMA_AU24_LAB2_Group4.Data.DTO
         [StringLength(60, MinimumLength = 8)]
         public string Password { get; set; } = null!;
 
-        [Compare("Password", ErrorMessage = "Passwords do not match")]
-        public string ConfirmPassword { get; set; } = null!;
+        
     }
 }

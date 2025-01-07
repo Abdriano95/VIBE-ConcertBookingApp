@@ -25,7 +25,6 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Profiles
                 .ForPath(dest => dest.ConcertTitle, opt => opt.MapFrom(src => src.Concert.Title));
 
             // Map DTO to Entity
-            // Note that ConcertTitle does not exists in the Performance entity, it is a derived property from the Concert entity.
 
             CreateMap<PerformanceDto, Performance>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ID))
