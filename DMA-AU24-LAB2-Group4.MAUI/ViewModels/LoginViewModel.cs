@@ -1,48 +1,63 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DMA_AU24_LAB2_Group4.MAUI.Services;
-using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 
 namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
 {
     public partial class LoginViewModel : ObservableObject
     {
-        private readonly ICustomerService _customerService;
+        private readonly IApiCustomerService _customerService;
+        private readonly ILogger<LoginViewModel> _logger;
 
         [ObservableProperty]
-        private string email;
+        private string email = string.Empty;
 
         [ObservableProperty]
-        private string password;
+        private string password = string.Empty;
 
-        public LoginViewModel(ICustomerService customerService)
+        [ObservableProperty]
+        private bool isBusy;
+
+        public LoginViewModel(IApiCustomerService customerService, ILogger<LoginViewModel> logger)
         {
             _customerService = customerService;
+            _logger = logger;
         }
 
         [RelayCommand]
         public async Task Login()
         {
-            var customer = await _customerService.LoginAsync(Email, Password);
-            if (customer != null)
+            if (IsBusy) return;
+
+            try
             {
-                //Clear prefrences before saving new customer ID
-                Preferences.Clear();
+                IsBusy = true;
 
+                var customer = await _customerService.LoginAsync(Email, Password);
+                if (customer != null)
+                {
+                    //Clear prefrences before saving new customer ID
+                    Preferences.Clear();
 
-                // Updates the customer ID in the preferences and sets the IsLoggedIn flag to true
-                Preferences.Set("CustomerId", customer.Id);
-                Preferences.Set("IsLoggedIn", true);
+                    // Updates the customer ID in the preferences and sets the IsLoggedIn flag to true
+                    Preferences.Set("CustomerId", customer.Id);
+                    Preferences.Set("IsLoggedIn", true);
 
-                Debug.WriteLine($"CustomerId saved in Preferences: {customer.Id}");
+                    _logger.LogInformation("User logged in successfully. CustomerId: {CustomerId}", customer.Id);
 
-                // Navigera till profilsidan
-                await Shell.Current.GoToAsync("//ConcertsPage");
+                    // Navigate to concerts page
+                    await Shell.Current.GoToAsync("//ConcertsPage");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Error", "Invalid email or password.", "OK");
+                }
             }
-            else
+            finally
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Invalid email or password.", "OK");
+                IsBusy = false;
             }
         }
 
@@ -50,7 +65,8 @@ namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
         [RelayCommand]
         public async Task NavigateToRegister()
         {
-            await Shell.Current.GoToAsync("RegisterPage");
+            // Use absolute navigation to avoid page stacking
+            await Shell.Current.GoToAsync("//RegisterPage");
         }
     }
 }

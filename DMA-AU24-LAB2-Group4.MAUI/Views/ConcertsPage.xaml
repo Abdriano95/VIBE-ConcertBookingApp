@@ -2,26 +2,143 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DMA_AU24_LAB2_Group4.MAUI.ViewModels"
+             xmlns:models="clr-namespace:DMA_AU24_LAB2_Group4.MAUI.Models"
              xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="DMA_AU24_LAB2_Group4.MAUI.Views.ConcertsPage"
-             Title="Concerts">
-    <VerticalStackLayout Padding="10" Spacing="10">
-        <CollectionView ItemsSource="{Binding ConcertItems}" SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="10" Margin="5" BackgroundColor="LightGray" CornerRadius="5">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ConcertViewModel}}, Path=ShowPerformancesCommand}"
-                                CommandParameter="{Binding}" />
-                        </Frame.GestureRecognizers>
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold" />
-                            <Label Text="{Binding Description}" FontSize="16" />
-                        </VerticalStackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+             x:DataType="vm:ConcertViewModel"
+             Title="Concerts"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+    <ContentPage.Behaviors>
+        <behaviors:EventToCommandBehavior EventName="Appearing" Command="{Binding LoadConcertsAsyncCommand}" />
+    </ContentPage.Behaviors>
+    
+    <Grid>
+        <!-- Main Content with RefreshView -->
+        <RefreshView IsRefreshing="{Binding IsBusy}"
+                     Command="{Binding LoadConcertsAsyncCommand}"
+                     RefreshColor="{StaticResource VibeCyan}">
+            <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+            
+            <!-- Page Header -->
+            <VerticalStackLayout Spacing="4" Margin="0,8,0,8">
+                <Label Text="Discover Events" 
+                       Style="{StaticResource Headline}" 
+                       HorizontalOptions="Start"
+                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource VibeCyan}}" />
+                <Label Text="Find your next unforgettable experience" 
+                       Style="{StaticResource CardSubtitle}" 
+                       HorizontalOptions="Start" />
+            </VerticalStackLayout>
+            
+            <!-- Concert Cards Collection -->
+            <CollectionView ItemsSource="{Binding ConcertItems}" 
+                            SelectionMode="Single"
+                            SelectedItem="{Binding SelectedConcert}"
+                            ItemsUpdatingScrollMode="KeepLastItemInView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Concert">
+                        <!-- Hero-style Concert Card -->
+                        <Border StrokeShape="RoundRectangle 20"
+                                Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}"
+                                StrokeThickness="0"
+                                Margin="0,0,0,16"
+                                HeightRequest="220">
+                            
+                            <Grid>
+                                <!-- Background Image -->
+                                <Image Source="{Binding ImageUrl}"
+                                       Aspect="AspectFill"
+                                       Opacity="0.9" />
+                                
+                                <!-- Gradient Overlay for text readability -->
+                                <BoxView>
+                                    <BoxView.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="Transparent" Offset="0.0" />
+                                            <GradientStop Color="#40000000" Offset="0.4" />
+                                            <GradientStop Color="#CC000000" Offset="0.85" />
+                                            <GradientStop Color="#EE000000" Offset="1.0" />
+                                        </LinearGradientBrush>
+                                    </BoxView.Background>
+                                </BoxView>
+                                
+                                <!-- Content Overlay -->
+                                <Grid Padding="20" RowDefinitions="Auto,*,Auto">
+                                    
+                                    <!-- Performance Count Badge (Top Right) -->
+                                    <Border Grid.Row="0"
+                                            HorizontalOptions="End"
+                                            StrokeShape="RoundRectangle 12"
+                                            Stroke="Transparent"
+                                            BackgroundColor="{StaticResource VibeCyan}"
+                                            Padding="12,6">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Label Text="🎤" FontSize="12" />
+                                            <Label Text="{Binding Performances.Count, StringFormat='{0} shows'}"
+                                                   TextColor="White"
+                                                   FontFamily="OpenSansSemibold"
+                                                   FontSize="12" />
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                    
+                                    <!-- Title and Description (Bottom) -->
+                                    <VerticalStackLayout Grid.Row="2" Spacing="6">
+                                        <Label Text="{Binding Title}"
+                                               TextColor="White"
+                                               FontFamily="OpenSansSemibold"
+                                               FontSize="22"
+                                               FontAttributes="Bold"
+                                               MaxLines="2"
+                                               LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding Description}"
+                                               TextColor="#CCFFFFFF"
+                                               FontFamily="OpenSansRegular"
+                                               FontSize="14"
+                                               MaxLines="2"
+                                               LineBreakMode="TailTruncation" />
+                                        
+                                        <!-- View Details Indicator -->
+                                        <HorizontalStackLayout Spacing="6" Margin="0,8,0,0">
+                                            <Label Text="View Performances"
+                                                   TextColor="{StaticResource VibeCyan}"
+                                                   FontFamily="OpenSansSemibold"
+                                                   FontSize="13" />
+                                            <Label Text="→"
+                                                   TextColor="{StaticResource VibeCyan}"
+                                                   FontSize="14"
+                                                   FontFamily="OpenSansSemibold" />
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                
+                <!-- Empty State -->
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout VerticalOptions="Center" 
+                                         HorizontalOptions="Center"
+                                         Padding="40">
+                        <Label Text="🎵" FontSize="64" HorizontalOptions="Center" />
+                        <Label Text="No concerts available"
+                               Style="{StaticResource SubHeadline}"
+                               HorizontalOptions="Center"
+                               Margin="0,16,0,8" />
+                        <Label Text="Check back later for upcoming events"
+                               Style="{StaticResource CardSubtitle}"
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+            
+            </VerticalStackLayout>
+        </ScrollView>
+        </RefreshView>
+        
+        <!-- Note: Loading indicator is provided by RefreshView's built-in spinner -->
+        <!-- The CollectionView.EmptyView handles the case when there's no data -->
+    </Grid>
 </ContentPage>

@@ -1,4 +1,4 @@
-﻿using DMA_AU24_LAB2_Group4.Data.Entity;
+using DMA_AU24_LAB2_Group4.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Repository
 {
     public class ConcertRepository : Repository<Concert>, IConcertRepository
     {
-        public ApplicationDbContext DbContext => Context as ApplicationDbContext;
+        public ApplicationDbContext DbContext => (ApplicationDbContext)Context;
 
         public ConcertRepository(ApplicationDbContext context)
             : base(context) { }

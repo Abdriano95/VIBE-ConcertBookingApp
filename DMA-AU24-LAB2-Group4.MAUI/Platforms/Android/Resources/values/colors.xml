@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#512BD4</color>
-    <color name="colorPrimaryDark">#2B0B98</color>
-    <color name="colorAccent">#2B0B98</color>
+    <!-- VIBE - Concert & Live Events App - Android Colors -->
+    <color name="colorPrimary">#A855F7</color>
+    <color name="colorPrimaryDark">#9333EA</color>
+    <color name="colorAccent">#00D4FF</color>
+    <color name="colorVibeCyan">#00D4FF</color>
+    <color name="colorVibePurple">#A855F7</color>
+    <color name="colorBackground">#0D0D1A</color>
 </resources>

@@ -1,4 +1,4 @@
-﻿using DMA_AU24_LAB2_Group4.Data.Entity;
+using DMA_AU24_LAB2_Group4.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Repository
 {
     public class BookingRepository : Repository<Booking>, IBookingRepository
     {
-        public ApplicationDbContext DbContext => Context as ApplicationDbContext;
+        public ApplicationDbContext DbContext => (ApplicationDbContext)Context;
 
         public BookingRepository(ApplicationDbContext context) : base(context) 
         {
@@ -22,7 +22,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Repository
             return await DbContext.Bookings
                 .Include(c => c.Customer)
                 .Include(p => p.Performance)
-                .ThenInclude(c => c.Concert)
+                .ThenInclude(p => p!.Concert)
                 .Where(b => b.Id == id)
                 .ToListAsync();
         }
@@ -39,7 +39,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Repository
             return await DbContext.Bookings
                 .Include(c => c.Customer)
                 .Include(p => p.Performance)
-                .ThenInclude(c => c.Concert)
+                .ThenInclude(p => p!.Concert)
                 .ToListAsync();
         }
 
@@ -53,7 +53,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Repository
             return await DbContext.Bookings
                 .Include(c => c.Customer)
                 .Include(p => p.Performance)
-                .ThenInclude(c => c.Concert)
+                .ThenInclude(p => p!.Concert)
                 .Where(b => b.CustomerId == customerId)
                 .ToListAsync();
         }

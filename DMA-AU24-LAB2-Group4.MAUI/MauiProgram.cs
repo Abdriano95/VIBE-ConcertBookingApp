@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui;
 using DMA_AU24_LAB2_Group4.MAUI.Services;
 using Microsoft.Extensions.Logging;
 using DMA_AU24_LAB2_Group4.MAUI.ViewModels;
@@ -15,6 +15,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseMauiCommunityToolkitMediaElement()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -24,12 +25,12 @@ namespace DMA_AU24_LAB2_Group4.MAUI
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-            // Services
+            // Services - Domain-specific API services
             builder.Services.AddSingleton<IHttpsClientHandlerService, HttpsClientHandlerService>();
-            builder.Services.AddSingleton<IRestService, RestService>();
-            builder.Services.AddSingleton<IBookingService, BookingService>();
-            builder.Services.AddSingleton<ICustomerService, CustomerService>();
-            builder.Services.AddSingleton<IConcertService, ConcertService>();
+            builder.Services.AddSingleton<IApiBookingService, ApiBookingService>();
+            builder.Services.AddSingleton<IApiConcertService, ApiConcertService>();
+            builder.Services.AddSingleton<IApiCustomerService, ApiCustomerService>();
+            builder.Services.AddSingleton<IApiPerformanceService, ApiPerformanceService>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddAutoMapper(typeof(CustomerProfile));
 

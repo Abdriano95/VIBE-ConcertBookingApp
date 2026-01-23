@@ -1,18 +1,24 @@
-﻿namespace DMA_AU24_LAB2_Group4.MAUI
+namespace DMA_AU24_LAB2_Group4.MAUI
 {
     public partial class App : Application
     {
         public App()
         {
             InitializeComponent();
-
-            // navigate based on login status
-            MainPage = new AppShell();
-            NavigateBasedOnLoginStatus();
         }
 
-        private async void NavigateBasedOnLoginStatus()
+        protected override Window CreateWindow(IActivationState? activationState)
         {
+            return new Window(new AppShell());
+        }
+
+        protected override async void OnStart()
+        {
+            base.OnStart();
+            
+            // Wait for the shell to be ready before navigating
+            await Task.Delay(100);
+            
             bool isLoggedIn = Preferences.Get("IsLoggedIn", false);
             if (isLoggedIn)
             {

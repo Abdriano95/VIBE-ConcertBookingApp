@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DMA_AU24_LAB2_Group4.Data.DTO;
 using DMA_AU24_LAB2_Group4.Data.Entity;
 
@@ -17,7 +17,7 @@ namespace DMA_AU24_LAB2_Group4.API.Profiles
                 .ForMember(dest => dest.Venue, opt => opt.MapFrom(src => src.Venue))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
-                .ForPath(dest => dest.ConcertTitle, opt => opt.MapFrom(src => src.Concert.Title));
+                .ForMember(dest => dest.ConcertTitle, opt => opt.MapFrom(src => src.Concert != null ? src.Concert.Title : string.Empty));
 
             // Map DTO to Entity
             // Note that ConcertTitle does not exists in the Performance entity, it is a derived property from the Concert entity.
@@ -28,7 +28,7 @@ namespace DMA_AU24_LAB2_Group4.API.Profiles
                 .ForMember(dest => dest.Venue, opt => opt.MapFrom(src => src.Venue))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
-                .ForPath(dest => dest.Concert.Title, opt => opt.MapFrom(src => src.ConcertTitle));
+                .ForMember(dest => dest.Concert, opt => opt.Ignore()); // Concert is a navigation property, set separately
         }
     }
 }
