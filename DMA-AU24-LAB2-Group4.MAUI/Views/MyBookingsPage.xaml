@@ -2,30 +2,92 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DMA_AU24_LAB2_Group4.MAUI.ViewModels"
+             xmlns:models="clr-namespace:DMA_AU24_LAB2_Group4.MAUI.Models"
              xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="DMA_AU24_LAB2_Group4.MAUI.Views.MyBookingsPage"
+             x:DataType="vm:MyBookingsViewModel"
              Title="My Bookings">
     <ContentPage.Behaviors>
-        <!-- Triggers the loadcommand -->
+        <!-- Triggers the load command on page appearing -->
         <behaviors:EventToCommandBehavior Command="{Binding LoadBookingsCommand}" EventName="Appearing" />
     </ContentPage.Behaviors>
 
-    <CollectionView ItemsSource="{Binding Bookings}" SelectionMode="None">
-        <CollectionView.ItemTemplate>
-            <DataTemplate>
-                <Frame Padding="10" Margin="5" BackgroundColor="LightGray" CornerRadius="5">
-                    <Frame.GestureRecognizers>
-                        <!-- Bind till navigeringskommandot i ViewModel -->
-                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MyBookingsViewModel}}, Path=NavigateToBookingDetailsCommand}" 
-                                              CommandParameter="{Binding}" />
-                    </Frame.GestureRecognizers>
-                    <VerticalStackLayout>
-                        <Label Text="{Binding ConcertTitle}" FontSize="18" FontAttributes="Bold" />
-                        <Label Text="{Binding PerformanceDate, StringFormat='Date: {0:dd MMM yyyy}'}" FontSize="14" />
-                        <Label Text="{Binding Venue}" FontSize="14" />
-                    </VerticalStackLayout>
-                </Frame>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+    <Grid>
+        <!-- Main Content -->
+        <RefreshView IsRefreshing="{Binding IsBusy}"
+                     Command="{Binding LoadBookingsCommand}"
+                     RefreshColor="{StaticResource VibeCyan}">
+            <VerticalStackLayout Style="{StaticResource PageContent}">
+                <CollectionView ItemsSource="{Binding Bookings}" 
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectedBooking, Mode=TwoWay}">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="12" Padding="40"
+                                             IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}">
+                            <Label Text="🎫" FontSize="48" HorizontalOptions="Center" />
+                            <Label Text="No bookings yet" Style="{StaticResource CardTitle}" HorizontalOptions="Center" />
+                            <Label Text="Browse concerts to book your first ticket!" 
+                                   Style="{StaticResource CardSubtitle}" 
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Booking">
+                            <Frame Style="{StaticResource BookingCard}" InputTransparent="True">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                    <!-- Ticket Icon -->
+                                    <Frame Grid.Column="0" 
+                                           BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}"
+                                           CornerRadius="8" 
+                                           Padding="10"
+                                           VerticalOptions="Center"
+                                           HasShadow="False">
+                                        <Label Text="🎟" FontSize="24" />
+                                    </Frame>
+                                    
+                                    <!-- Booking Details -->
+                                    <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                        <Label Text="{Binding ConcertTitle}" Style="{StaticResource CardTitle}" />
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Label Text="🗓" FontSize="12" />
+                                            <Label Text="{Binding PerformanceDate, StringFormat='{0:ddd, MMM d, yyyy}'}" 
+                                                   Style="{StaticResource CardSubtitle}" />
+                                        </HorizontalStackLayout>
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Label Text="📍" FontSize="12" />
+                                            <Label Text="{Binding Venue}" Style="{StaticResource CardSubtitle}" />
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                    
+                                    <!-- Navigation indicator -->
+                                    <Label Grid.Column="2" 
+                                           Text="›" 
+                                           FontSize="24" 
+                                           TextColor="{AppThemeBinding Light={StaticResource TextMutedLight}, Dark={StaticResource TextMutedDark}}"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </RefreshView>
+        
+        <!-- Loading Overlay -->
+        <Grid IsVisible="{Binding IsBusy}"
+              BackgroundColor="#80000000"
+              InputTransparent="False">
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="12">
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   Color="{StaticResource VibeCyan}"
+                                   HeightRequest="50"
+                                   WidthRequest="50" />
+                <Label Text="Loading bookings..."
+                       TextColor="White"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="14"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
 </ContentPage>

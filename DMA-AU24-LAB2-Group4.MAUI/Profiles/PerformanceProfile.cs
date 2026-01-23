@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DMA_AU24_LAB2_Group4.Data.DTO;
 using DMA_AU24_LAB2_Group4.MAUI.Models;
 using System;
@@ -22,7 +22,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI.Profiles
                 .ForMember(dest => dest.Venue, opt => opt.MapFrom(src => src.Venue))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
-                .ForPath(dest => dest.ConcertTitle, opt => opt.MapFrom(src => src.Concert.Title));
+                .ForPath(dest => dest.ConcertTitle, opt => opt.MapFrom(src => src.Concert != null ? src.Concert.Title : string.Empty));
 
             // Map DTO to Entity
 

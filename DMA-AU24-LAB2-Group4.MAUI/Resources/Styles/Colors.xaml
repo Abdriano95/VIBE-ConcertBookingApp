@@ -1,38 +1,118 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <?xaml-comp compile="true" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+    <!-- ============================================== -->
+    <!-- VIBE - Concert & Live Events App               -->
+    <!-- Brand Theme: Cyan to Purple Gradient           -->
+    <!-- A modern dark theme with neon gradient accents -->
+    <!-- ============================================== -->
+
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
-    <Color x:Key="Primary">#512BD4</Color>
-    <Color x:Key="PrimaryDark">#ac99ea</Color>
-    <Color x:Key="PrimaryDarkText">#242424</Color>
-    <Color x:Key="Secondary">#DFD8F7</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
-    <Color x:Key="Tertiary">#2B0B98</Color>
+    <!-- === PRIMARY BRAND COLORS (VIBE Purple) === -->
+    <!-- Purple/Violet from the VIBE logo -->
+    <Color x:Key="Primary">#A855F7</Color>
+    <Color x:Key="PrimaryDark">#9333EA</Color>
+    <Color x:Key="PrimaryDarkText">#3B0764</Color>
+    <Color x:Key="PrimaryLight">#C084FC</Color>
+    
+    <!-- === VIBE GRADIENT COLORS === -->
+    <!-- Cyan end of gradient -->
+    <Color x:Key="VibeCyan">#00D4FF</Color>
+    <Color x:Key="VibeCyanLight">#22D3EE</Color>
+    <Color x:Key="VibeCyanDark">#06B6D4</Color>
+    
+    <!-- Purple end of gradient -->
+    <Color x:Key="VibePurple">#A855F7</Color>
+    <Color x:Key="VibePurpleLight">#C084FC</Color>
+    <Color x:Key="VibePurpleDark">#9333EA</Color>
+    
+    <!-- Vibrant cyan accent - energy, excitement, CTAs -->
+    <Color x:Key="Accent">#00D4FF</Color>
+    <Color x:Key="AccentLight">#22D3EE</Color>
+    <Color x:Key="AccentDark">#06B6D4</Color>
+    
+    <!-- Secondary - soft purple-gray for supporting elements -->
+    <Color x:Key="Secondary">#7C3AED</Color>
+    <Color x:Key="SecondaryDarkText">#A78BFA</Color>
+    <Color x:Key="Tertiary">#6D28D9</Color>
 
-    <Color x:Key="White">White</Color>
-    <Color x:Key="Black">Black</Color>
-    <Color x:Key="Magenta">#D600AA</Color>
-    <Color x:Key="MidnightBlue">#190649</Color>
-    <Color x:Key="OffBlack">#1f1f1f</Color>
+    <!-- === SEMANTIC COLORS === -->
+    <!-- Success - confirmations, available tickets -->
+    <Color x:Key="Success">#22C55E</Color>
+    <Color x:Key="SuccessLight">#4ADE80</Color>
+    <Color x:Key="SuccessDark">#16A34A</Color>
+    
+    <!-- Warning - limited availability, alerts -->
+    <Color x:Key="Warning">#EAB308</Color>
+    <Color x:Key="WarningLight">#FDE047</Color>
+    <Color x:Key="WarningDark">#CA8A04</Color>
+    
+    <!-- Danger - errors, delete actions, sold out -->
+    <Color x:Key="Danger">#EF4444</Color>
+    <Color x:Key="DangerLight">#F87171</Color>
+    <Color x:Key="DangerDark">#DC2626</Color>
 
-    <Color x:Key="Gray100">#E1E1E1</Color>
-    <Color x:Key="Gray200">#C8C8C8</Color>
-    <Color x:Key="Gray300">#ACACAC</Color>
-    <Color x:Key="Gray400">#919191</Color>
-    <Color x:Key="Gray500">#6E6E6E</Color>
-    <Color x:Key="Gray600">#404040</Color>
-    <Color x:Key="Gray900">#212121</Color>
-    <Color x:Key="Gray950">#141414</Color>
+    <!-- === BACKGROUND COLORS === -->
+    <!-- Dark theme backgrounds (VIBE dark navy) -->
+    <Color x:Key="BackgroundDark">#0D0D1A</Color>
+    <Color x:Key="BackgroundLight">#F8FAFC</Color>
+    
+    <!-- Card/Surface colors (deep purple-tinted dark) -->
+    <Color x:Key="CardDark">#1A1A2E</Color>
+    <Color x:Key="CardLight">#FFFFFF</Color>
+    <Color x:Key="SurfaceDark">#252542</Color>
+    <Color x:Key="SurfaceLight">#F1F5F9</Color>
+    
+    <!-- Elevated surfaces (modals, dropdowns) -->
+    <Color x:Key="ElevatedDark">#2D2D4A</Color>
+    <Color x:Key="ElevatedLight">#E2E8F0</Color>
 
+    <!-- === TEXT COLORS === -->
+    <Color x:Key="TextPrimaryDark">#F8FAFC</Color>
+    <Color x:Key="TextPrimaryLight">#0F172A</Color>
+    <Color x:Key="TextSecondaryDark">#94A3B8</Color>
+    <Color x:Key="TextSecondaryLight">#64748B</Color>
+    <Color x:Key="TextMutedDark">#64748B</Color>
+    <Color x:Key="TextMutedLight">#94A3B8</Color>
+
+    <!-- === BORDER/DIVIDER COLORS === -->
+    <Color x:Key="BorderDark">#3D3D5C</Color>
+    <Color x:Key="BorderLight">#E2E8F0</Color>
+    <Color x:Key="DividerDark">#252542</Color>
+    <Color x:Key="DividerLight">#F1F5F9</Color>
+
+    <!-- === LEGACY COLORS (for compatibility) === -->
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="Black">#000000</Color>
+    <Color x:Key="Magenta">#A855F7</Color>
+    <Color x:Key="MidnightBlue">#0D0D1A</Color>
+    <Color x:Key="OffBlack">#0D0D1A</Color>
+
+    <!-- Gray scale (Purple-tinted for VIBE consistency) -->
+    <Color x:Key="Gray100">#F1F5F9</Color>
+    <Color x:Key="Gray200">#E2E8F0</Color>
+    <Color x:Key="Gray300">#C4B5FD</Color>
+    <Color x:Key="Gray400">#A78BFA</Color>
+    <Color x:Key="Gray500">#7C3AED</Color>
+    <Color x:Key="Gray600">#3D3D5C</Color>
+    <Color x:Key="Gray900">#1A1A2E</Color>
+    <Color x:Key="Gray950">#0D0D1A</Color>
+
+    <!-- === BRUSHES === -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource Accent}"/>
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
     <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}"/>
+
+    <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource Success}"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource Warning}"/>
+    <SolidColorBrush x:Key="DangerBrush" Color="{StaticResource Danger}"/>
 
     <SolidColorBrush x:Key="Gray100Brush" Color="{StaticResource Gray100}"/>
     <SolidColorBrush x:Key="Gray200Brush" Color="{StaticResource Gray200}"/>
@@ -42,4 +122,5 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
 </ResourceDictionary>

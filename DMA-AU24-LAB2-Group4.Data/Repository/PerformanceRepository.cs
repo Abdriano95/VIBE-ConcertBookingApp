@@ -1,4 +1,4 @@
-﻿using DMA_AU24_LAB2_Group4.Data.Entity;
+using DMA_AU24_LAB2_Group4.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Repository
 {
     public class PerformanceRepository : Repository<Performance>, IPerformanceRepository
     {
-        public ApplicationDbContext DbContext => Context as ApplicationDbContext;
+        public ApplicationDbContext DbContext => (ApplicationDbContext)Context;
 
         public PerformanceRepository(ApplicationDbContext context)
             : base(context) { }
@@ -34,7 +34,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Repository
         {
             return await DbContext.Performances
                             .Where(p => p.ConcertId == concertId &&
-                                        !p.Bookings.Any(b => b.CustomerId == customerId))
+                                        (p.Bookings == null || !p.Bookings.Any(b => b.CustomerId == customerId)))
                             .Include(p => p.Concert)
                             .Include(p => p.Bookings) 
                             .ToListAsync();

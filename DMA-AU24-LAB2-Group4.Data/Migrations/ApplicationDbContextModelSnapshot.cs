@@ -84,6 +84,10 @@ namespace DMA_AU24_LAB2_Group4.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -98,30 +102,35 @@ namespace DMA_AU24_LAB2_Group4.Data.Migrations
                         {
                             Id = 1,
                             Description = "Experience the best of Ed Sheeran live!",
+                            ImageUrl = "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800",
                             Title = "Ed Sheeran World Tour"
                         },
                         new
                         {
                             Id = 2,
                             Description = "A musical journey through Taylor Swift's iconic albums.",
+                            ImageUrl = "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800",
                             Title = "Taylor Swift Eras Tour"
                         },
                         new
                         {
                             Id = 3,
                             Description = "Kendrick in his absolute prime, destroying his enemies.",
+                            ImageUrl = "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=800",
                             Title = "Kendrick Lamar GNX Summer World Tour"
                         },
                         new
                         {
                             Id = 4,
                             Description = "Bruno Mars isn't just a performer; he's a showman. His world tours are legendary, delivering unforgettable experiences that blend incredible musicianship, dazzling choreography, and a pure party atmosphere.",
+                            ImageUrl = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800",
                             Title = "Bruno Mars Die With A Smile World Tour"
                         },
                         new
                         {
                             Id = 5,
                             Description = "A celebration of Beyoncé's iconic Renaissance album.",
+                            ImageUrl = "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800",
                             Title = "Beyoncé Renaissance World Tour"
                         });
                 });
@@ -165,7 +174,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Migrations
                             Email = "john.doe@example.com",
                             FirstName = "John",
                             LastName = "Doe",
-                            Password = "hashed_password_1"
+                            Password = "$2a$11$K3g6XoTau5FJxqGHVdPrS.g1GiqHvfTdL8F7rT4jiYvLlMHxqZpTK"
                         },
                         new
                         {
@@ -173,7 +182,7 @@ namespace DMA_AU24_LAB2_Group4.Data.Migrations
                             Email = "jane.smith@example.com",
                             FirstName = "Jane",
                             LastName = "Smith",
-                            Password = "hashed_password_2"
+                            Password = "$2a$11$PLrJGz8K8Q4FG5xY0F7Yw.3Rjx6H5MQqH7F5V2mN4oP6qR8sT0uWY"
                         });
                 });
 

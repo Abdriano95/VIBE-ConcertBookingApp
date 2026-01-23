@@ -1,56 +1,78 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DMA_AU24_LAB2_Group4.MAUI.Models;
 using DMA_AU24_LAB2_Group4.MAUI.Services;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
 {
     public partial class BookingDetailsViewModel : ObservableObject, IQueryAttributable
     {
-        private readonly IRestService _restService;
+        private readonly IApiBookingService _bookingService;
+        private readonly ILogger<BookingDetailsViewModel> _logger;
 
         [ObservableProperty]
-        private Booking booking;
+        private Booking? booking;
 
-        public BookingDetailsViewModel(IRestService restService)
+        [ObservableProperty]
+        private bool isBusy;
+
+        [ObservableProperty]
+        private bool isDeleting;
+
+        public BookingDetailsViewModel(IApiBookingService bookingService, ILogger<BookingDetailsViewModel> logger)
         {
-            _restService = restService;
+            _bookingService = bookingService;
+            _logger = logger;
         }
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            if (query.TryGetValue("bookingId", out var bookingId))
+            if (query.TryGetValue("bookingId", out var bookingId) && bookingId != null)
             {
-                Debug.WriteLine($"Received BookingId: {bookingId}");
-                LoadBookingDetailsCommand.Execute(int.Parse(bookingId.ToString()));
+                _logger.LogDebug("Received BookingId: {BookingId}", bookingId);
+                if (int.TryParse(bookingId.ToString(), out int parsedBookingId))
+                {
+                    LoadBookingDetailsCommand.Execute(parsedBookingId);
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to parse BookingId: {BookingId}", bookingId);
+                }
             }
             else
             {
-                Debug.WriteLine("No BookingId found in query attributes.");
+                _logger.LogWarning("No BookingId found in query attributes");
             }
         }
 
         [RelayCommand]
         public async Task LoadBookingDetails(int bookingId)
         {
-            Debug.WriteLine($"Loading booking details for BookingId: {bookingId}");
-            var bookingDetails = await _restService.GetBookingByIdAsync(bookingId);
+            if (IsBusy) return;
 
-            if (bookingDetails != null)
+            try
             {
-                Booking = bookingDetails;
-                Debug.WriteLine($"Loaded Booking: {Booking.ConcertTitle}, {Booking.PerformanceDate}, {Booking.Venue}");
+                IsBusy = true;
+
+                _logger.LogDebug("Loading booking details for BookingId {BookingId}", bookingId);
+                var bookingDetails = await _bookingService.GetBookingByIdAsync(bookingId);
+
+                if (bookingDetails != null)
+                {
+                    Booking = bookingDetails;
+                    _logger.LogDebug("Loaded booking: {ConcertTitle} at {Venue} on {PerformanceDate}", 
+                        Booking.ConcertTitle, Booking.Venue, Booking.PerformanceDate);
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to load booking details for BookingId {BookingId}", bookingId);
+                    await Shell.Current.DisplayAlert("Error", "Failed to load booking details.", "OK");
+                }
             }
-            else
+            finally
             {
-                Debug.WriteLine("Failed to load booking details from RestService.");
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to load booking details.", "OK");
+                IsBusy = false;
             }
         }
 
@@ -58,18 +80,35 @@ namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
         [RelayCommand]
         public async Task DeleteBooking()
         {
-            var confirm = await Application.Current.MainPage.DisplayAlert("Confirm", "Do you really want to delete this booking?", "Yes", "No");
+            if (IsDeleting) return;
+
+            var confirm = await Shell.Current.DisplayAlert("Confirm", "Do you really want to delete this booking?", "Yes", "No");
             if (confirm)
             {
-                var success = await _restService.DeleteBookingAsync(Booking.BookingId);
-                if (success)
+                try
                 {
-                    await Application.Current.MainPage.DisplayAlert("Success", "Booking deleted successfully.", "OK");
-                    await Shell.Current.GoToAsync(".."); // Navigera tillbaka till bokningslistan
+                    IsDeleting = true;
+
+                    if (Booking == null)
+                    {
+                        await Shell.Current.DisplayAlert("Error", "No booking to delete.", "OK");
+                        return;
+                    }
+                    
+                    var success = await _bookingService.DeleteBookingAsync(Booking.BookingId);
+                    if (success)
+                    {
+                        await Shell.Current.DisplayAlert("Success", "Booking deleted successfully.", "OK");
+                        await Shell.Current.GoToAsync(".."); // Navigate back to bookings list
+                    }
+                    else
+                    {
+                        await Shell.Current.DisplayAlert("Error", "Failed to delete booking.", "OK");
+                    }
                 }
-                else
+                finally
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to delete booking.", "OK");
+                    IsDeleting = false;
                 }
             }
         }

@@ -1,33 +1,127 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DMA_AU24_LAB2_Group4.MAUI.ViewModels"
              xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="DMA_AU24_LAB2_Group4.MAUI.Views.ProfilePage"
-             Title="Profile Page">
+             x:DataType="vm:ProfileViewModel"
+             Title="Profile">
 
     <ContentPage.Behaviors>
         <behaviors:EventToCommandBehavior EventName="Appearing" Command="{Binding LoadProfileCommand}" />
     </ContentPage.Behaviors>
     
-    <VerticalStackLayout Padding="20" Spacing="10">
-        <!-- First Name -->
-        <Entry Placeholder="First Name" Text="{Binding FirstName}" />
-        <Label Text="{Binding [FirstName].ErrorContent}" TextColor="Red" IsVisible="{Binding [FirstName].HasError}" />
+    <Grid>
+        <!-- Main Content -->
+        <ScrollView>
+            <VerticalStackLayout Style="{StaticResource PageContent}">
+                
+                <!-- Profile Header -->
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center" Margin="0,0,0,16">
+                    <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" 
+                           CornerRadius="40" 
+                           HeightRequest="80" 
+                           WidthRequest="80"
+                           Padding="0"
+                           HasShadow="False"
+                           HorizontalOptions="Center">
+                        <Label Text="👤" 
+                               FontSize="36" 
+                               HorizontalOptions="Center" 
+                               VerticalOptions="Center" />
+                    </Frame>
+                    <Label Text="Your Profile" Style="{StaticResource SubHeadline}" />
+                </VerticalStackLayout>
+                
+                <!-- Profile Form Card -->
+                <Frame Style="{StaticResource ElevatedCard}">
+                    <VerticalStackLayout Spacing="16">
+                        
+                        <!-- Name Fields -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <!-- First Name -->
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="First Name" Style="{StaticResource MutedLabel}" />
+                                <Entry Placeholder="First Name" 
+                                       Text="{Binding FirstName}"
+                                       IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                            </VerticalStackLayout>
+                            
+                            <!-- Last Name -->
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Last Name" Style="{StaticResource MutedLabel}" />
+                                <Entry Placeholder="Last Name" 
+                                       Text="{Binding LastName}"
+                                       IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                            </VerticalStackLayout>
+                        </Grid>
 
-        <!-- Last Name -->
-        <Entry Placeholder="Last Name" Text="{Binding LastName}" />
-        <Label Text="{Binding [LastName].ErrorContent}" TextColor="Red" IsVisible="{Binding [LastName].HasError}" />
+                        <!-- Email -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Email Address" Style="{StaticResource MutedLabel}" />
+                            <Entry Placeholder="Email" 
+                                   Text="{Binding Email}" 
+                                   Keyboard="Email"
+                                   IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                        </VerticalStackLayout>
 
-        <!-- Email -->
-        <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
-        <Label Text="{Binding [Email].ErrorContent}" TextColor="Red" IsVisible="{Binding [Email].HasError}" />
+                        <!-- Password -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="New Password (leave blank to keep current)" Style="{StaticResource MutedLabel}" />
+                            <Entry Placeholder="Enter new password" 
+                                   Text="{Binding Password}" 
+                                   IsPassword="True"
+                                   IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                        </VerticalStackLayout>
 
-        <!-- Password -->
-        <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True" />
-        <Label Text="{Binding [Password].ErrorContent}" TextColor="Red" IsVisible="{Binding [Password].HasError}" />
-
-        <!-- Buttons -->
-        <Button Text="Update Profile" Command="{Binding UpdateProfileCommand}" />
-        <Button Text="Logout" Command="{Binding LogoutCommand}" BackgroundColor="Red" TextColor="White" />
-    </VerticalStackLayout>
+                        <!-- Update Button with Loading State -->
+                        <Grid>
+                            <Button Text="Save Changes" 
+                                    Command="{Binding UpdateProfileCommand}"
+                                    IsEnabled="{Binding IsSaving, Converter={StaticResource InvertedBoolConverter}}"
+                                    Margin="0,8,0,0" />
+                        </Grid>
+                        
+                        <!-- Saving Indicator -->
+                        <ActivityIndicator IsRunning="{Binding IsSaving}"
+                                           IsVisible="{Binding IsSaving}"
+                                           Color="{StaticResource VibeCyan}"
+                                           HeightRequest="30"
+                                           WidthRequest="30"
+                                           HorizontalOptions="Center" />
+                                
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Logout Section -->
+                <Frame Style="{StaticResource ConcertCard}" Margin="0,8,0,0">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Session" Style="{StaticResource CardTitle}" />
+                        <Label Text="Sign out of your account on this device" Style="{StaticResource CardSubtitle}" />
+                        <Button Text="Sign Out" 
+                                Command="{Binding LogoutCommand}" 
+                                Style="{StaticResource DangerButton}" />
+                    </VerticalStackLayout>
+                </Frame>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+        
+        <!-- Loading Overlay -->
+        <Grid IsVisible="{Binding IsBusy}"
+              BackgroundColor="#80000000"
+              InputTransparent="False">
+            <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="12">
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   Color="{StaticResource VibeCyan}"
+                                   HeightRequest="50"
+                                   WidthRequest="50" />
+                <Label Text="Loading profile..."
+                       TextColor="White"
+                       FontFamily="OpenSansSemibold"
+                       FontSize="14"
+                       HorizontalOptions="Center" />
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
 </ContentPage>

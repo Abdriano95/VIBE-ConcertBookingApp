@@ -1,19 +1,226 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DMA_AU24_LAB2_Group4.MAUI.ViewModels"
              x:Class="DMA_AU24_LAB2_Group4.MAUI.Views.RegisterPage"
-             Title="Register">
-    <VerticalStackLayout Padding="20">
-        <Entry Placeholder="First Name" Text="{Binding FirstName}" />
-        <Entry Placeholder="Last Name" Text="{Binding LastName}" />
-        <Entry Placeholder="Email" Text="{Binding Email}" />
-        <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True" />
-        <Entry Placeholder="Confirm Password" Text="{Binding ConfirmPassword}" IsPassword="True" />
-        <Button Text="Register" Command="{Binding RegisterCommand}" />
-        <Label Text="Already have an account? Login here" TextColor="Blue" HorizontalOptions="Center">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}" />
-            </Label.GestureRecognizers>
-        </Label>
-    </VerticalStackLayout>
+             x:DataType="vm:RegisterViewModel"
+             Title="Register"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasNavigationBar="False">
+
+    <!-- Gradient Background (no video to avoid MediaElement conflicts) -->
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#0D0D1A" Offset="0.0" />
+                <GradientStop Color="#1A1A2E" Offset="0.3" />
+                <GradientStop Color="#16213E" Offset="0.6" />
+                <GradientStop Color="#0D0D1A" Offset="1.0" />
+            </LinearGradientBrush>
+        </Grid.Background>
+        
+        <!-- Content -->
+        <ScrollView VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Padding="24,30,24,24" 
+                                 Spacing="0"
+                                 VerticalOptions="Center">
+                
+                <!-- VIBE Logo (Larger) -->
+                <Image Source="vibefull_removebg.png" 
+                       HeightRequest="140" 
+                       Aspect="AspectFit"
+                       HorizontalOptions="Center"
+                       Margin="0,0,0,24" />
+                
+                <!-- Glassmorphism Register Card (Compact) -->
+                <Border StrokeShape="RoundRectangle 20"
+                        Stroke="#30FFFFFF"
+                        StrokeThickness="1"
+                        Padding="20"
+                        Margin="0,0,0,16"
+                        BackgroundColor="#401A1A2E">
+                    <VerticalStackLayout Spacing="12">
+                        
+                        <!-- Header -->
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Create Account"
+                                   TextColor="White"
+                                   FontFamily="OpenSansSemibold"
+                                   FontSize="22"
+                                   HorizontalOptions="Start" />
+                            <Label Text="Join VIBE to book live events"
+                                   TextColor="#80FFFFFF"
+                                   FontFamily="OpenSansRegular"
+                                   FontSize="12"
+                                   HorizontalOptions="Start" />
+                        </VerticalStackLayout>
+                        
+                        <!-- Name Fields (Side by Side) -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="First Name" 
+                                       TextColor="#BBFFFFFF"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="11" />
+                                <Border StrokeShape="RoundRectangle 10"
+                                        Stroke="#30FFFFFF"
+                                        StrokeThickness="1"
+                                        BackgroundColor="#25FFFFFF"
+                                        Padding="4,0"
+                                        HeightRequest="42">
+                                    <Entry Placeholder="John"
+                                           PlaceholderColor="#55FFFFFF"
+                                           Text="{Binding FirstName}"
+                                           TextColor="White"
+                                           BackgroundColor="Transparent"
+                                           FontFamily="OpenSansRegular"
+                                           FontSize="14"
+                                           VerticalOptions="Center" />
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Last Name" 
+                                       TextColor="#BBFFFFFF"
+                                       FontFamily="OpenSansSemibold"
+                                       FontSize="11" />
+                                <Border StrokeShape="RoundRectangle 10"
+                                        Stroke="#30FFFFFF"
+                                        StrokeThickness="1"
+                                        BackgroundColor="#25FFFFFF"
+                                        Padding="4,0"
+                                        HeightRequest="42">
+                                    <Entry Placeholder="Doe"
+                                           PlaceholderColor="#55FFFFFF"
+                                           Text="{Binding LastName}"
+                                           TextColor="White"
+                                           BackgroundColor="Transparent"
+                                           FontFamily="OpenSansRegular"
+                                           FontSize="14"
+                                           VerticalOptions="Center" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+                        
+                        <!-- Email Field -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Email" 
+                                   TextColor="#BBFFFFFF"
+                                   FontFamily="OpenSansSemibold"
+                                   FontSize="11" />
+                            <Border StrokeShape="RoundRectangle 10"
+                                    Stroke="#30FFFFFF"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#25FFFFFF"
+                                    Padding="4,0"
+                                    HeightRequest="42">
+                                <Entry Placeholder="you@example.com"
+                                       PlaceholderColor="#55FFFFFF"
+                                       Text="{Binding Email}" 
+                                       Keyboard="Email"
+                                       TextColor="White"
+                                       BackgroundColor="Transparent"
+                                       FontFamily="OpenSansRegular"
+                                       FontSize="14"
+                                       VerticalOptions="Center" />
+                            </Border>
+                        </VerticalStackLayout>
+                        
+                        <!-- Password Field -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Password" 
+                                   TextColor="#BBFFFFFF"
+                                   FontFamily="OpenSansSemibold"
+                                   FontSize="11" />
+                            <Border StrokeShape="RoundRectangle 10"
+                                    Stroke="#30FFFFFF"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#25FFFFFF"
+                                    Padding="4,0"
+                                    HeightRequest="42">
+                                <Entry Placeholder="Create a strong password"
+                                       PlaceholderColor="#55FFFFFF"
+                                       Text="{Binding Password}" 
+                                       IsPassword="True"
+                                       TextColor="White"
+                                       BackgroundColor="Transparent"
+                                       FontFamily="OpenSansRegular"
+                                       FontSize="14"
+                                       VerticalOptions="Center" />
+                            </Border>
+                        </VerticalStackLayout>
+                        
+                        <!-- Confirm Password Field -->
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Confirm Password" 
+                                   TextColor="#BBFFFFFF"
+                                   FontFamily="OpenSansSemibold"
+                                   FontSize="11" />
+                            <Border StrokeShape="RoundRectangle 10"
+                                    Stroke="#30FFFFFF"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#25FFFFFF"
+                                    Padding="4,0"
+                                    HeightRequest="42">
+                                <Entry Placeholder="Re-enter your password"
+                                       PlaceholderColor="#55FFFFFF"
+                                       Text="{Binding ConfirmPassword}" 
+                                       IsPassword="True"
+                                       TextColor="White"
+                                       BackgroundColor="Transparent"
+                                       FontFamily="OpenSansRegular"
+                                       FontSize="14"
+                                       VerticalOptions="Center" />
+                            </Border>
+                        </VerticalStackLayout>
+                        
+                        <!-- Create Account Button -->
+                        <Button Text="Create Account"
+                                Command="{Binding RegisterCommand}"
+                                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                                TextColor="White"
+                                FontFamily="OpenSansSemibold"
+                                FontSize="15"
+                                CornerRadius="12"
+                                HeightRequest="46"
+                                Margin="0,4,0,0">
+                            <Button.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="{StaticResource VibePurple}" Offset="0.0" />
+                                    <GradientStop Color="{StaticResource VibeCyan}" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                        
+                        <!-- Loading Indicator -->
+                        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                           IsVisible="{Binding IsBusy}"
+                                           Color="{StaticResource VibeCyan}"
+                                           HeightRequest="30"
+                                           WidthRequest="30"
+                                           HorizontalOptions="Center"
+                                           Margin="0,8,0,0" />
+                        
+                    </VerticalStackLayout>
+                </Border>
+                
+                <!-- Login Link -->
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                    <Label Text="Already have an account?"
+                           TextColor="#80FFFFFF"
+                           FontFamily="OpenSansRegular"
+                           FontSize="13" />
+                    <Label Text="Sign in"
+                           TextColor="{StaticResource VibeCyan}"
+                           FontFamily="OpenSansSemibold"
+                           FontSize="13"
+                           TextDecorations="Underline">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavigateToLoginCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </HorizontalStackLayout>
+                
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

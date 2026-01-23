@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DMA_AU24_LAB2_Group4.MAUI.Models;
 using DMA_AU24_LAB2_Group4.MAUI.Services;
@@ -13,33 +13,36 @@ namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
 {
     public partial class RegisterViewModel : ObservableValidator
     {
-        private readonly ICustomerService _customerService;
+        private readonly IApiCustomerService _customerService;
 
         [ObservableProperty]
         [Required(ErrorMessage = "First Name is required.")]
         [StringLength(50, ErrorMessage = "First Name cannot exceed 50 characters.")]
-        private string firstName;
+        private string firstName = string.Empty;
 
         [ObservableProperty]
         [Required(ErrorMessage = "Last Name is required.")]
         [StringLength(50, ErrorMessage = "Last Name cannot exceed 50 characters.")]
-        private string lastName;
+        private string lastName = string.Empty;
 
         [ObservableProperty]
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email address.")]
-        private string email;
+        private string email = string.Empty;
 
         [ObservableProperty]
         [Required(ErrorMessage = "Password is required.")]
         [StringLength(60, MinimumLength = 8, ErrorMessage = "Password must be between 8 and 60 characters.")]
-        private string password;
+        private string password = string.Empty;
 
         [ObservableProperty]
         [Required(ErrorMessage = "Confirm Password is required.")]
-        private string confirmPassword;
+        private string confirmPassword = string.Empty;
 
-        public RegisterViewModel(ICustomerService customerService)
+        [ObservableProperty]
+        private bool isBusy;
+
+        public RegisterViewModel(IApiCustomerService customerService)
         {
             _customerService = customerService;
         }
@@ -47,6 +50,7 @@ namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
         [RelayCommand]
         public async Task Register()
         {
+            if (IsBusy) return;
 
             //Validate the model
             ValidateAllProperties();
@@ -54,43 +58,50 @@ namespace DMA_AU24_LAB2_Group4.MAUI.ViewModels
             if (HasErrors)
             {
                 var errors = string.Join("\n", GetErrors(null).Select(e => e.ErrorMessage));
-                await Application.Current.MainPage.DisplayAlert("Validation Error", errors, "OK");
+                await Shell.Current.DisplayAlert("Validation Error", errors, "OK");
                 return;
             }
 
             if (Password != ConfirmPassword)
             {
-                await Application.Current.MainPage.DisplayAlert("Validation Error", "Passwords do not match", "OK");
+                await Shell.Current.DisplayAlert("Validation Error", "Passwords do not match", "OK");
                 return;
             }
 
-
-            var customer = new Customer
+            try
             {
-                FirstName = FirstName,
-                LastName = LastName,
-                Email = Email,
-                Password = Password,
-                ConfirmPassword = ConfirmPassword
-            };
+                IsBusy = true;
 
-            var success = await _customerService.RegisterCustomerAsync(customer);
-            if (!success)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", "Registration failed", "OK");
-                return;
+                var customer = new Customer
+                {
+                    FirstName = FirstName,
+                    LastName = LastName,
+                    Email = Email,
+                    Password = Password,
+                    ConfirmPassword = ConfirmPassword
+                };
+
+                var success = await _customerService.RegisterCustomerAsync(customer);
+                if (!success)
+                {
+                    await Shell.Current.DisplayAlert("Error", "Registration failed", "OK");
+                    return;
+                }
+
+                // Clear the fields
+                FirstName = string.Empty;
+                LastName = string.Empty;
+                Email = string.Empty;
+                Password = string.Empty;
+                ConfirmPassword = string.Empty;
+
+                // Navigate to login page after successful registration
+                await Shell.Current.GoToAsync("//LoginPage");
             }
-
-            // Clear the fields
-            FirstName = string.Empty;
-            LastName = string.Empty;
-            Email = string.Empty;
-            Password = string.Empty;
-            ConfirmPassword = string.Empty;
-
-
-            // Navigate to login page after successful registration
-            await Shell.Current.GoToAsync("//LoginPage");
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         [RelayCommand]

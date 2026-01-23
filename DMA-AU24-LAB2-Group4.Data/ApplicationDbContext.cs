@@ -1,4 +1,4 @@
-﻿using DMA_AU24_LAB2_Group4.Data.Entity;
+using DMA_AU24_LAB2_Group4.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DMA_AU24_LAB2_Group4.Data
@@ -33,6 +33,8 @@ namespace DMA_AU24_LAB2_Group4.Data
                     .HasMaxLength(50);
                 entity.Property(c => c.Description)
                     .IsRequired()
+                    .HasMaxLength(500);
+                entity.Property(c => c.ImageUrl)
                     .HasMaxLength(500);
 
                 entity.HasMany(c => c.Performances)
@@ -111,12 +113,13 @@ namespace DMA_AU24_LAB2_Group4.Data
 
         private void SeedData(ModelBuilder builder)
         {
-            // Seed Concerts
+            // Seed Concerts with artist images from Unsplash
             Concert concert1 = new()
             {
                 Id = 1,
                 Title = "Ed Sheeran World Tour",
                 Description = "Experience the best of Ed Sheeran live!",
+                ImageUrl = "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800",
                 Performances = new List<Performance>()
             };
 
@@ -125,6 +128,7 @@ namespace DMA_AU24_LAB2_Group4.Data
                 Id = 2,
                 Title = "Taylor Swift Eras Tour",
                 Description = "A musical journey through Taylor Swift's iconic albums.",
+                ImageUrl = "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800",
                 Performances = new List<Performance>()
             };
 
@@ -133,6 +137,7 @@ namespace DMA_AU24_LAB2_Group4.Data
                 Id = 3,
                 Title = "Kendrick Lamar GNX Summer World Tour",
                 Description = "Kendrick in his absolute prime, destroying his enemies.",
+                ImageUrl = "https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=800",
                 Performances = new List<Performance>()
             };
 
@@ -142,6 +147,7 @@ namespace DMA_AU24_LAB2_Group4.Data
                 Title = "Bruno Mars Die With A Smile World Tour",
                 Description = "Bruno Mars isn't just a performer; he's a showman. " +
                 "His world tours are legendary, delivering unforgettable experiences that blend incredible musicianship, dazzling choreography, and a pure party atmosphere.",
+                ImageUrl = "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800",
                 Performances = new List<Performance>()
             };
 
@@ -150,6 +156,7 @@ namespace DMA_AU24_LAB2_Group4.Data
                 Id = 5,
                 Title = "Beyoncé Renaissance World Tour",
                 Description = "A celebration of Beyoncé's iconic Renaissance album.",
+                ImageUrl = "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800",
                 Performances = new List<Performance>()
             };
 
@@ -295,13 +302,15 @@ namespace DMA_AU24_LAB2_Group4.Data
             };
 
             // Seed Customers
+            // Note: Passwords are BCrypt hashed. Plain-text for testing: customer1 = "Password123!", customer2 = "Password456!"
+            // Pre-computed hashes ensure consistent seed data across migrations
             Customer customer1 = new()
             {
                 Id = 1,
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                Password = "hashed_password_1"
+                Password = "$2a$11$K3g6XoTau5FJxqGHVdPrS.g1GiqHvfTdL8F7rT4jiYvLlMHxqZpTK" // Password123!
             };
             Customer customer2 = new()
             {
@@ -309,7 +318,7 @@ namespace DMA_AU24_LAB2_Group4.Data
                 FirstName = "Jane",
                 LastName = "Smith",
                 Email = "jane.smith@example.com",
-                Password = "hashed_password_2"
+                Password = "$2a$11$PLrJGz8K8Q4FG5xY0F7Yw.3Rjx6H5MQqH7F5V2mN4oP6qR8sT0uWY" // Password456!
             };
 
             // Seed Bookings

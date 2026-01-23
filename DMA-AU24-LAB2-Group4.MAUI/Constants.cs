@@ -16,8 +16,10 @@ namespace DMA_AU24_LAB2_Group4.MAUI
         DeviceInfo.Platform == DevicePlatform.Android
         ? (DeviceInfo.DeviceType == DeviceType.Physical ? "100.71.109.122" : "10.0.2.2")
         : "localhost";
-        public static string Scheme = "https"; // or http
-        public static string Port = "5001"; // or 5000
+        
+        // Use HTTP for Android emulator to avoid certificate issues
+        public static string Scheme = DeviceInfo.Platform == DevicePlatform.Android ? "http" : "https";
+        public static string Port = DeviceInfo.Platform == DevicePlatform.Android ? "5000" : "5001";
         public static string BaseUrl = $"{Scheme}://{LocalhostUrl}:{Port}/api";
 
         // Specific REST URLs
