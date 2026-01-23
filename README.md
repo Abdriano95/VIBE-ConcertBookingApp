@@ -357,8 +357,8 @@ This project maintains high code quality standards:
 
 ## 👥 Authors
 
-- **Abdulla Mehdi** - [GitHub](https://github.com/yourusername)
-- **Joakim Olsson** - [GitHub](https://github.com/yourusername)
+- **Abdulla Mehdi** - [GitHub](https://github.com/Abdriano95)
+- **Joakim Olsson** - [GitHub](https://github.com/joakimolssonn)
 
 ---
 
