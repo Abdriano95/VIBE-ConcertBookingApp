@@ -81,14 +81,6 @@
   </tr>
 </table>
 
-> **Note:** To add screenshots, create a `docs/screenshots/` folder and add the following images:
-> - `concerts-page.png` - Main concerts list with hero cards
-> - `performances-page.png` - Performance selection for a concert
-> - `my-bookings-page.png` - User's booked tickets list
-> - `booking-details-page.png` - Booking confirmation details
-> - `profile-page.png` - User profile page
-> - `register-page.png` - Registration form
-
 ---
 
 ## 🏗️ Architecture
