@@ -310,7 +310,7 @@ namespace DMA_AU24_LAB2_Group4.Data
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                Password = "$2a$11$K3g6XoTau5FJxqGHVdPrS.g1GiqHvfTdL8F7rT4jiYvLlMHxqZpTK" // Password123!
+                Password = "$2a$11$14iUvy7JDmzV14JpiRZmA.czCYnNgnrGnEG9XNuKzxyIaV/jWRTDi" // Password123!
             };
             Customer customer2 = new()
             {
@@ -318,7 +318,7 @@ namespace DMA_AU24_LAB2_Group4.Data
                 FirstName = "Jane",
                 LastName = "Smith",
                 Email = "jane.smith@example.com",
-                Password = "$2a$11$PLrJGz8K8Q4FG5xY0F7Yw.3Rjx6H5MQqH7F5V2mN4oP6qR8sT0uWY" // Password456!
+                Password = "$2a$11$uxpheqSZiEIy10yyL7a8GOhXV4r7XXPyHik89046f3h3OI.Ldwspe" // Password456!
             };
 
             // Seed Bookings
