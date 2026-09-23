@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/.NET-9.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 9"/>
+  <img src="https://img.shields.io/badge/.NET-8.0_%7C_9.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 8 and .NET 9"/>
   <img src="https://img.shields.io/badge/ASP.NET_Core-API-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="ASP.NET Core"/>
   <img src="https://img.shields.io/badge/.NET_MAUI-Mobile-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET MAUI"/>
   <img src="https://img.shields.io/badge/Entity_Framework-Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt="EF Core"/>
@@ -164,7 +164,7 @@ DMA-AU24-LAB2-Group4/
 
 | Technology | Purpose |
 |------------|---------|
-| **ASP.NET Core 9** | Web API framework |
+| **ASP.NET Core 8** | Web API framework |
 | **Entity Framework Core** | Object-Relational Mapping |
 | **SQL Server LocalDB** | Development database |
 | **AutoMapper** | Object-to-object mapping |
@@ -195,7 +195,8 @@ DMA-AU24-LAB2-Group4/
 
 ### Prerequisites
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) and the [.NET 8 runtime](https://dotnet.microsoft.com/download/dotnet/8.0) (the API and tests target .NET 8, the MAUI app .NET 9)
+- [EF Core CLI tools](https://learn.microsoft.com/en-us/ef/core/cli/dotnet): `dotnet tool install --global dotnet-ef`
 - [Visual Studio 2022](https://visualstudio.microsoft.com/) (17.8+) with:
   - ASP.NET and web development workload
   - .NET MAUI workload
@@ -207,8 +208,8 @@ DMA-AU24-LAB2-Group4/
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/DMA-AU24-LAB2-Group4.git
-   cd DMA-AU24-LAB2-Group4
+   git clone https://github.com/Abdriano95/VIBE-ConcertBookingApp.git
+   cd VIBE-ConcertBookingApp
    ```
 
 2. **Restore dependencies**
@@ -220,8 +221,7 @@ DMA-AU24-LAB2-Group4/
 3. **Apply database migrations**
 
    ```bash
-   cd DMA-AU24-LAB2-Group4.API
-   dotnet ef database update
+   dotnet ef database update --project DMA-AU24-LAB2-Group4.Data --startup-project DMA-AU24-LAB2-Group4.Data
    ```
 
 4. **Run the API**
@@ -290,11 +290,13 @@ The API provides full Swagger documentation with XML comments on all endpoints.
 | `GET` | `/api/Concert` | List all concerts |
 | `GET` | `/api/Concert/{id}` | Get concert by ID |
 | `GET` | `/api/Performance` | List all performances |
+| `GET` | `/api/Performance/{id}` | Get performance by ID |
 | `GET` | `/api/Performance/concert/{id}` | Get performances by concert |
 | `GET` | `/api/Performance/available/{concertId}/{customerId}` | Get available performances |
 | `POST` | `/api/Customer/register` | Register new customer |
 | `POST` | `/api/Customer/login` | Authenticate customer |
 | `GET` | `/api/Customer/{id}` | Get customer profile |
+| `POST` | `/api/Customer/getBookings` | Get a customer's bookings (customer ID in the request body) |
 | `PUT` | `/api/Customer/update` | Update customer profile |
 | `GET` | `/api/Booking` | List all bookings |
 | `GET` | `/api/Booking/customer/{customerId}` | Get customer's bookings |
@@ -341,9 +343,9 @@ This project maintains high code quality standards:
 
 - ✅ **0 Build Warnings** - Clean compilation
 - ✅ **0 Build Errors** - Stable codebase
-- ✅ **41/41 Tests Passing** - Full test coverage
+- ✅ **41/41 Tests Passing** - Password security, exception middleware and booking repository
 - ✅ **Compiled XAML Bindings** - Better performance
-- ✅ **Structured Logging** - ILogger throughout
+- ✅ **Structured Logging** - ILogger in the exception middleware and the MAUI services and view models
 
 ---
 
@@ -351,6 +353,8 @@ This project maintains high code quality standards:
 
 - **Abdulla Mehdi** - [GitHub](https://github.com/Abdriano95)
 - **Joakim Olsson** - [GitHub](https://github.com/joakimolssonn)
+
+VIBE started as a two-person group project in the Development of Mobile Applications course (autumn 2024). In January 2026 Abdulla Mehdi continued the project alone: BCrypt password hashing, the global exception middleware, the redesigned MAUI UI, and the password security and exception middleware test suites (40 of the 41 tests).
 
 ---
 
