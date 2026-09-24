@@ -358,6 +358,10 @@ This project maintains high code quality standards:
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
 
+### Third-party licenses
+
+AutoMapper 15.0 and later is dual-licensed by Lucky Penny Software under the Reciprocal Public License 1.5 (RPL-1.5) or a commercial license, see the [AutoMapper license](https://github.com/LuckyPennySoftware/AutoMapper/blob/main/LICENSE.md). Without a license key, AutoMapper logs a license warning at startup and otherwise runs unchanged.
+
 ---
 
 ## 🙏 Acknowledgments
