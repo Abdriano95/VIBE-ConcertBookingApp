@@ -7,6 +7,7 @@ using DMA_AU24_LAB2_Group4.Data.Entity;
 using DMA_AU24_LAB2_Group4.Data.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
 
@@ -21,7 +22,7 @@ namespace DMA_AU24_LAB2_Group4.Test
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<CustomerProfile>();
-            });
+            }, NullLoggerFactory.Instance);
             _mapper = config.CreateMapper();
         }
 

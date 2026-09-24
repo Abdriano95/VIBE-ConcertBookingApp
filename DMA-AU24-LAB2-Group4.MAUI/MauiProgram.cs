@@ -31,8 +31,8 @@ namespace DMA_AU24_LAB2_Group4.MAUI
             builder.Services.AddSingleton<IApiConcertService, ApiConcertService>();
             builder.Services.AddSingleton<IApiCustomerService, ApiCustomerService>();
             builder.Services.AddSingleton<IApiPerformanceService, ApiPerformanceService>();
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            builder.Services.AddAutoMapper(typeof(CustomerProfile));
+            // All mapping profiles live in this assembly
+            builder.Services.AddAutoMapper(cfg => { }, typeof(CustomerProfile));
 
             // Pages
             builder.Services.AddTransient<LoginPage>();
